@@ -1,0 +1,38 @@
+# Fertekz IT
+
+> Webbutveckling och webdesign av Tommy Fernández i Eskilstuna. Moderna företagshemsidor från 299 kr/mån utan startavgift, inklusive hosting, SSL, support och löpande ändringar.
+
+## Pages
+
+- [Startsida](/): Tjänster, projekt, arbetsprocess, omdömen och kontakt.
+- [Webbyrå i Eskilstuna](/webbyra-eskilstuna): Lokal webbyrå, vad som ingår, process och priser.
+- [Vad kostar en hemsida](/vad-kostar-en-hemsida): Prisguide med prisnivåer, löpande kostnader och prisexempel.
+- [Hemsida till företag](/hemsida-till-foretag): Innehåll, konverteringsråd och pris för företagswebbplatser.
+- [Fertekz Start](/tjanster/landningssida): Enkelsidig webbplats för 299 kr/mån.
+- [Fertekz Företag](/tjanster/foretagswebbplats): Upp till fem sidor för 399 kr/mån.
+- [Webbutveckling](/webbutveckling): Utveckling i React och TypeScript, prestanda och teknisk SEO.
+- [Webbdesign](/webbdesign): Design, UX och konverteringsoptimering.
+- [Hemsidor](/hemsidor): Översikt över alla hemsidespaket och priser.
+- [Responsiv webbdesign](/responsiv-webbdesign): Mobilanpassning och Core Web Vitals.
+- [Webbyrå i Strängnäs](/orter/strangnas): Hemsidor för företag i Strängnäs.
+- [Webbyrå i Katrineholm](/orter/katrineholm): Hemsidor för företag i Katrineholm.
+- [Webbyrå i Nyköping](/orter/nykoping): Hemsidor för företag i Nyköping.
+- [Case: DrogSök.se](/projekt/drogsok): Sökverktyg för läkemedel byggt i React och Node.js.
+- [Case: Intuitive Gaming](/projekt/intuitive-gaming): Gaming- och server hosting-webbplats.
+- [Case: Hakuna Potata](/projekt/hakuna-potata): Webbplats för amerikansk snabbmatskedja.
+- [Case: CoDBase](/projekt/codbase): Community-webbplats för Call of Duty med tävlingar och LAN.
+
+- [Om & FAQ](/#about): Bakgrund, kompetens och vanliga frågor.
+- [Erbjudanden](/#services): Landningssidor, portfolio och företagswebbplatser med priser.
+- [Projekt](/projekt): Kundcase för DrogSök.se, Intuitive Gaming, Hakuna Potata och CoDBase.
+- [Arbetsprocess](/#process): Konsultation, design, granskning och lansering.
+- [Omdömen](/#testimonials): Kundrecensioner.
+- [Kontakt](/#contact): E-post tommy@fertekz.com, telefon 0734145099, kontaktformulär.
+
+## Facts
+
+- Verksamhet: Fertekz IT, enmansdriven webbyrå i Eskilstuna, Södermanland, Sverige.
+- Ansvarig: Tommy Fernández, webbutvecklare och webdesigner.
+- Teknik: React, TypeScript, Node.js, responsiv design, teknisk SEO.
+- Serviceområde: Eskilstuna, Strängnäs, Katrineholm, Nyköping, Sörmland, Mälardalen.
+- Kontakt: tommy@fertekz.com, 073-414 50 99. Svar inom 24 timmar.
