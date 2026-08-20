@@ -1,4 +1,4 @@
-import Stripe from "npm:stripe@17.7.0";
+import Stripe from "npm:stripe@^22.0.0";
 
 const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
 const allowedOrigins = new Set([
@@ -46,7 +46,7 @@ Deno.serve(async (request) => {
       return json({ error: "Paket, företag eller e-post saknas" }, 400, requestOrigin);
     }
 
-    const stripe = new Stripe(stripeSecretKey, { apiVersion: "2025-02-24.acacia" });
+    const stripe = new Stripe(stripeSecretKey);
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
       customer_email: email,
