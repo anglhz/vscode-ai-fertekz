@@ -54,10 +54,10 @@ const Footer = () => {
           <div>
             <Link to="/" className="inline-block mb-4" aria-label="Fertekz IT – startsidan">
               <img
-                src="/fertekz-logo-horizontal.png"
+                src="/fertekz-logo-horizontal.svg"
                 alt="Fertekz IT"
                 className="h-12 w-auto"
-                width="299"
+                width="470"
                 height="100"
                 loading="lazy"
               />

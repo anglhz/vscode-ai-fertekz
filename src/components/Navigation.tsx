@@ -55,10 +55,10 @@ const Navigation = () => {
               className="inline-flex items-center hover:scale-105 transition-transform"
             >
               <img
-                src="/fertekz-logo-horizontal.png"
+                src="/fertekz-logo-horizontal.svg"
                 alt="Fertekz IT"
                 className="h-10 w-auto"
-                width="299"
+                width="470"
                 height="100"
               />
             </a>
