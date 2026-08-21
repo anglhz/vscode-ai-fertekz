@@ -52,7 +52,16 @@ const Footer = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 py-12">
           {/* About */}
           <div>
-            <h3 className="text-2xl font-bold gradient-text mb-4">Fertekz IT</h3>
+            <Link to="/" className="inline-block mb-4" aria-label="Fertekz IT – startsidan">
+              <img
+                src="/fertekz-logo-horizontal.png"
+                alt="Fertekz IT"
+                className="h-12 w-auto"
+                width="299"
+                height="100"
+                loading="lazy"
+              />
+            </Link>
             <p className="text-muted-foreground mb-6 max-w-md">
               Webbutvecklare och webbdesigner i Eskilstuna. Moderna, snabba och mobilanpassade
               hemsidor för företag i Sörmland och Mälardalen.

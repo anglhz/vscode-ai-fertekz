@@ -52,10 +52,15 @@ const Navigation = () => {
             <a
               href="/#home"
               onClick={(e) => handleNavClick(e, "/#home")}
-              className="text-2xl font-black shine-text hover:scale-105 transition-transform tracking-wider inline-block"
-              style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}
+              className="inline-flex items-center hover:scale-105 transition-transform"
             >
-              Fertekz IT
+              <img
+                src="/fertekz-logo-horizontal.png"
+                alt="Fertekz IT"
+                className="h-10 w-auto"
+                width="299"
+                height="100"
+              />
             </a>
           </div>
 
