@@ -1,27 +1,30 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BriefcaseBusiness, Building2, CheckCircle2, Hammer, Scissors, Star } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, Building2, CheckCircle2, Hammer, PenTool } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-type ExampleKind = "salon" | "builder" | "consultant";
+type ExampleKind = "tattoo" | "builder" | "consultant";
 
-const examples: { kind: ExampleKind; category: string; title: string; description: string }[] = [
-  { kind: "salon", category: "Frisörsalong", title: "Elegant frisörsalong med onlinebokning", description: "Varm och personlig design med behandlingar, priser och en tydlig väg till bokning." },
-  { kind: "builder", category: "Lokalt tjänsteföretag", title: "Trygg hemsida för hantverkare", description: "Robust upplägg med tjänster, garantier, referenser och ett snabbt offertflöde." },
-  { kind: "consultant", category: "Konsultföretag", title: "Professionell konsultsida", description: "Ren och förtroendeingivande design med expertis, resultat och tydliga kontaktvägar." },
+const examples: { kind: ExampleKind; category: string; title: string; description: string; href: string }[] = [
+  { kind: "tattoo", category: "Tatueringsstudio", title: "Obsidian Ink", description: "Mörk och exklusiv studiosida med portfolio, information om studion och tydliga vägar till bokning.", href: "https://obsidian-ink.fertekz.com" },
+  { kind: "builder", category: "Lokalt tjänsteföretag", title: "Trygg hemsida för hantverkare", description: "Robust upplägg med tjänster, garantier, referenser och ett snabbt offertflöde.", href: "/demo/byggforetag" },
+  { kind: "consultant", category: "Konsultföretag", title: "Professionell konsultsida", description: "Ren och förtroendeingivande design med expertis, resultat och tydliga kontaktvägar.", href: "/demo/konsultbolag" },
 ];
 
 const SitePreview = ({ kind, large = false }: { kind: ExampleKind; large?: boolean }) => {
-  if (kind === "salon") {
+  if (kind === "tattoo") {
     return (
-      <div className={`bg-[#fffaf8] text-[#352b29] overflow-hidden ${large ? "min-h-[560px]" : "h-[370px]"}`}>
-        <div className="flex items-center justify-between px-5 py-3 border-b border-[#eaded9] text-[10px]"><span className="font-serif text-base font-bold">Klipp&amp;Dax</span><span className="hidden sm:block">Behandlingar · Priser · Om oss</span><span className="bg-[#a66358] text-white rounded-full px-3 py-1">Boka tid</span></div>
-        <div className={`grid grid-cols-2 items-center ${large ? "min-h-[300px]" : "h-[190px]"}`}>
-          <div className="p-5 sm:p-8"><span className="uppercase tracking-[.2em] text-[8px] text-[#a66358]">Skönhet på dina villkor</span><h3 className={`${large ? "text-4xl" : "text-xl"} font-serif mt-2 leading-tight`}>Din stund av lugn</h3><p className="text-[9px] sm:text-xs mt-3 text-[#76635f]">Omsorgsfulla behandlingar för hud, hår och naglar — mitt i stan.</p><button className="mt-4 bg-[#a66358] text-white rounded-full px-4 py-2 text-[9px]">Boka behandling</button></div>
-          <div className="h-full bg-gradient-to-br from-[#efd9d2] via-[#d5a99e] to-[#9d6258] flex items-center justify-center"><Scissors className={`${large ? "h-24 w-24" : "h-14 w-14"} text-white/80`} /></div>
+      <div className={`relative bg-[#050608] text-[#d5d7dc] overflow-hidden ${large ? "min-h-[560px]" : "h-[370px]"}`}>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(69,101,160,.16),transparent_38%)]" />
+        <div className="relative flex items-center justify-between px-5 py-4 border-b border-white/5 text-[9px] uppercase tracking-[.18em]"><span className="font-serif text-sm normal-case tracking-normal font-bold text-white">Obsidian Ink</span><span className="hidden sm:block text-white/45">Om studion · Galleri · Lediga tider · Kontakt</span></div>
+        <div className={`relative flex flex-col items-center justify-center text-center px-6 ${large ? "min-h-[360px]" : "h-[245px]"}`}>
+          <p className="text-[8px] uppercase tracking-[.35em] text-white/40 mb-5">Eskilstuna · Sedan 2005</p>
+          <h3 className={`${large ? "text-6xl" : "text-4xl"} font-serif leading-none bg-gradient-to-r from-[#d7dae1] via-[#6883b3] to-[#d7dae1] bg-clip-text text-transparent`}>Obsidian Ink</h3>
+          <p className="text-[9px] sm:text-xs text-white/35 max-w-sm mt-5">Modern tatueringsstudio med kvalitet, hantverk och personligt uttryck i fokus.</p>
+          <span className="mt-6 border border-white/15 px-5 py-2 text-[8px] uppercase tracking-[.2em]">Se galleri</span>
         </div>
-        <div className="px-5 py-4"><p className="font-serif text-sm mb-3">Populära behandlingar</p><div className="grid grid-cols-3 gap-2">{[["Ansiktsbehandling", "från 690 kr"], ["Klippning", "från 495 kr"], ["Naglar", "från 450 kr"]].map(([name, price]) => <div key={name} className="bg-white p-3 rounded-lg shadow-sm"><span className="block text-[9px] font-medium">{name}</span><span className="text-[8px] text-[#a66358]">{price}</span></div>)}</div><p className="text-center text-[9px] mt-4">★★★★★ “Jag känner mig alltid så väl omhändertagen.”</p></div>
+        <div className="relative border-t border-white/5 px-5 py-4 flex items-center justify-between text-[8px] uppercase tracking-[.18em] text-white/35"><span>Realism · Black &amp; Grey · Custom</span><PenTool className="h-4 w-4 text-[#6883b3]" /></div>
       </div>
     );
   }
@@ -70,7 +73,7 @@ const ExampleSites = () => (
                 <p className="text-muted-foreground mb-6">{example.description}</p>
                 <div className="space-y-2 text-sm mb-7"><p className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary"/> Anpassad för mobil och dator</p><p className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary"/> Tydliga vägar till kontakt</p><p className="flex gap-2"><CheckCircle2 className="h-4 w-4 text-primary"/> Färger och innehåll efter ditt varumärke</p></div>
                 <Button asChild variant="outline" className="w-fit">
-                  <a href={`/demo/${example.kind === "salon" ? "frisorsalong" : example.kind === "builder" ? "byggforetag" : "konsultbolag"}`} target="_blank" rel="noopener noreferrer">Se exempelsidan <ArrowRight className="ml-2 h-4 w-4" /></a>
+                  <a href={example.href} target="_blank" rel="noopener noreferrer">Se exempelsidan <ArrowRight className="ml-2 h-4 w-4" /></a>
                 </Button>
               </div>
             </div>
@@ -81,7 +84,7 @@ const ExampleSites = () => (
       <div className="mt-14 text-center reveal">
         <h3 className="text-2xl font-bold mb-3">Vi skapar hemsidor för fler branscher</h3>
         <p className="text-muted-foreground mb-6">Oavsett verksamhet anpassas upplägget efter vad dina kunder behöver se och göra.</p>
-        <div className="flex flex-wrap justify-center gap-3 mb-9">{[[Scissors, "Frisör"], [Hammer, "Bygg"], [BriefcaseBusiness, "Konsult"], [Building2, "Andra företag"]].map(([Icon, label]) => { const ItemIcon = Icon as typeof Scissors; return <Badge key={label as string} variant="secondary" className="px-4 py-2"><ItemIcon className="h-4 w-4 mr-2" />{label as string}</Badge>; })}</div>
+        <div className="flex flex-wrap justify-center gap-3 mb-9">{[[PenTool, "Tatueringsstudio"], [Hammer, "Bygg"], [BriefcaseBusiness, "Konsult"], [Building2, "Andra företag"]].map(([Icon, label]) => { const ItemIcon = Icon as typeof PenTool; return <Badge key={label as string} variant="secondary" className="px-4 py-2"><ItemIcon className="h-4 w-4 mr-2" />{label as string}</Badge>; })}</div>
         <p className="text-sm text-muted-foreground max-w-2xl mx-auto mb-7">Exemplen är fristående designkoncept framtagna för att visa möjligheterna. Din sida får eget innehåll och ett uttryck som passar ditt företag.</p>
         <Button asChild size="lg" variant="outline"><Link to="/projekt">Fler projekt <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
       </div>
