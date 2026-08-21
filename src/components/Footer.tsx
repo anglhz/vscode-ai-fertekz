@@ -57,7 +57,7 @@ const Footer = () => {
                 src="/fertekz-logo-horizontal.svg"
                 alt="Fertekz IT"
                 className="h-12 w-auto"
-                width="470"
+                width="299"
                 height="100"
                 loading="lazy"
               />

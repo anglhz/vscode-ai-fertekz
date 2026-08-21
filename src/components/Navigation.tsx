@@ -58,7 +58,7 @@ const Navigation = () => {
                 src="/fertekz-logo-horizontal.svg"
                 alt="Fertekz IT"
                 className="h-10 w-auto"
-                width="470"
+                width="299"
                 height="100"
               />
             </a>
