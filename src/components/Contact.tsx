@@ -29,7 +29,8 @@ const Contact = () => {
 
   useEffect(() => {
     const selectedPackage = sessionStorage.getItem("selectedPackage");
-    if (selectedPackage) setValue("subject", `Jag är intresserad av ${selectedPackage}`);
+    if (selectedPackage)
+      setValue("subject", `Jag är intresserad av ${selectedPackage}`);
   }, [setValue]);
 
   const onSubmit = async (data: FormData) => {
@@ -67,13 +68,13 @@ const Contact = () => {
       }
 
       // Send to n8n webhook
-      await fetch("https://n8n.fertekz.com/webhook/96809f01-6a07-4ae3-8985-7eaf6713ad1d", {
+      await fetch("https://n8n.fertekz.com/webhook-test/contact-forms", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          website: "fertekz.com",
+          website: "https://fertekz.com",
           type: "contact_form",
           name: data.name,
           email: data.email,
@@ -93,9 +94,13 @@ const Contact = () => {
       if (message.includes("Too many requests")) {
         toast.error("För många förfrågningar. Försök igen om 15 minuter.");
       } else if (message.includes("Invalid input")) {
-        toast.error("Ogiltig inmatning. Kontrollera dina uppgifter och försök igen.");
+        toast.error(
+          "Ogiltig inmatning. Kontrollera dina uppgifter och försök igen.",
+        );
       } else if (message.includes("Rate limit")) {
-        toast.error("För många meddelanden skickade. Vänta en stund innan du försöker igen.");
+        toast.error(
+          "För många meddelanden skickade. Vänta en stund innan du försöker igen.",
+        );
       } else {
         toast.error("Något gick fel. Försök igen senare.");
       }
@@ -112,7 +117,8 @@ const Contact = () => {
             Boka en <span className="gradient-text">gratis genomgång</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Berätta kort om företaget så går vi igenom vilket abonnemang som passar. Samtalet är kostnadsfritt och utan förpliktelser.
+            Berätta kort om företaget så går vi igenom vilket abonnemang som
+            passar. Samtalet är kostnadsfritt och utan förpliktelser.
           </p>
         </div>
 
@@ -122,7 +128,8 @@ const Contact = () => {
             <div>
               <h3 className="text-2xl font-bold mb-6">Kontakta mig</h3>
               <p className="text-muted-foreground mb-8">
-                Jag svarar vanligtvis inom 24 timmar. Välj det sätt som passar dig bäst!
+                Jag svarar vanligtvis inom 24 timmar. Välj det sätt som passar
+                dig bäst!
               </p>
             </div>
 
@@ -159,8 +166,12 @@ const Contact = () => {
                   </div>
                   <div>
                     <h4 className="font-semibold">Plats & Serviceområde</h4>
-                    <p className="text-muted-foreground">Eskilstuna, Södermanland</p>
-                    <p className="text-sm text-muted-foreground/80">Hjälper kunder i hela Sörmland & Mälardalen</p>
+                    <p className="text-muted-foreground">
+                      Eskilstuna, Södermanland
+                    </p>
+                    <p className="text-sm text-muted-foreground/80">
+                      Hjälper kunder i hela Sörmland & Mälardalen
+                    </p>
                   </div>
                 </div>
               </Card>
@@ -169,9 +180,10 @@ const Contact = () => {
             {/* Service Area Info */}
             <div className="mt-6 p-4 rounded-lg bg-primary/5 border border-primary/10">
               <p className="text-sm text-muted-foreground">
-                <strong className="text-foreground">Serviceområde:</strong> Jag hjälper företag och privatpersoner i
-                Eskilstuna, Strängnäs, Katrineholm, Nyköping och hela Södermanland/Sörmland med professionell
-                webbutveckling och webdesign.
+                <strong className="text-foreground">Serviceområde:</strong> Jag
+                hjälper företag och privatpersoner i Eskilstuna, Strängnäs,
+                Katrineholm, Nyköping och hela Södermanland/Sörmland med
+                professionell webbutveckling och webdesign.
               </p>
             </div>
           </div>
@@ -191,27 +203,50 @@ const Contact = () => {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="contact-name" className="text-sm font-medium mb-2 block">Namn</label>
+                  <label
+                    htmlFor="contact-name"
+                    className="text-sm font-medium mb-2 block"
+                  >
+                    Namn
+                  </label>
                   <Input
                     id="contact-name"
                     {...register("name", {
                       required: "Namn är obligatoriskt",
-                      minLength: { value: 2, message: "Namn måste vara minst 2 tecken" },
-                      maxLength: { value: 100, message: "Namn får inte vara längre än 100 tecken" },
+                      minLength: {
+                        value: 2,
+                        message: "Namn måste vara minst 2 tecken",
+                      },
+                      maxLength: {
+                        value: 100,
+                        message: "Namn får inte vara längre än 100 tecken",
+                      },
                     })}
                     placeholder="Ditt namn"
                     className="bg-background/50 border-primary/30 focus:border-primary"
                     disabled={isSubmitting}
                   />
-                  {errors.name && <p className="text-destructive text-sm mt-1">{errors.name.message}</p>}
+                  {errors.name && (
+                    <p className="text-destructive text-sm mt-1">
+                      {errors.name.message}
+                    </p>
+                  )}
                 </div>
                 <div>
-                  <label htmlFor="contact-email" className="text-sm font-medium mb-2 block">Email</label>
+                  <label
+                    htmlFor="contact-email"
+                    className="text-sm font-medium mb-2 block"
+                  >
+                    Email
+                  </label>
                   <Input
                     id="contact-email"
                     {...register("email", {
                       required: "Email är obligatoriskt",
-                      maxLength: { value: 254, message: "Email får inte vara längre än 254 tecken" },
+                      maxLength: {
+                        value: 254,
+                        message: "Email får inte vara längre än 254 tecken",
+                      },
                       pattern: {
                         value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                         message: "Ogiltig email-adress",
@@ -222,44 +257,83 @@ const Contact = () => {
                     className="bg-background/50 border-primary/30 focus:border-primary"
                     disabled={isSubmitting}
                   />
-                  {errors.email && <p className="text-destructive text-sm mt-1">{errors.email.message}</p>}
+                  {errors.email && (
+                    <p className="text-destructive text-sm mt-1">
+                      {errors.email.message}
+                    </p>
+                  )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="contact-subject" className="text-sm font-medium mb-2 block">Ämne</label>
+                <label
+                  htmlFor="contact-subject"
+                  className="text-sm font-medium mb-2 block"
+                >
+                  Ämne
+                </label>
                 <Input
                   id="contact-subject"
                   {...register("subject", {
                     required: "Ämne är obligatoriskt",
-                    minLength: { value: 3, message: "Ämne måste vara minst 3 tecken" },
-                    maxLength: { value: 200, message: "Ämne får inte vara längre än 200 tecken" },
+                    minLength: {
+                      value: 3,
+                      message: "Ämne måste vara minst 3 tecken",
+                    },
+                    maxLength: {
+                      value: 200,
+                      message: "Ämne får inte vara längre än 200 tecken",
+                    },
                   })}
                   placeholder="Vilket abonnemang är du intresserad av?"
                   className="bg-background/50 border-primary/30 focus:border-primary"
                   disabled={isSubmitting}
                 />
-                {errors.subject && <p className="text-destructive text-sm mt-1">{errors.subject.message}</p>}
+                {errors.subject && (
+                  <p className="text-destructive text-sm mt-1">
+                    {errors.subject.message}
+                  </p>
+                )}
               </div>
 
               <div>
-                <label htmlFor="contact-message" className="text-sm font-medium mb-2 block">Meddelande</label>
+                <label
+                  htmlFor="contact-message"
+                  className="text-sm font-medium mb-2 block"
+                >
+                  Meddelande
+                </label>
                 <Textarea
                   id="contact-message"
                   {...register("message", {
                     required: "Meddelande är obligatoriskt",
-                    minLength: { value: 10, message: "Meddelande måste vara minst 10 tecken" },
-                    maxLength: { value: 5000, message: "Meddelande får inte vara längre än 5000 tecken" },
+                    minLength: {
+                      value: 10,
+                      message: "Meddelande måste vara minst 10 tecken",
+                    },
+                    maxLength: {
+                      value: 5000,
+                      message: "Meddelande får inte vara längre än 5000 tecken",
+                    },
                   })}
                   placeholder="Berätta kort om företaget och vad hemsidan behöver göra..."
                   rows={6}
                   className="bg-background/50 border-primary/30 focus:border-primary resize-none"
                   disabled={isSubmitting}
                 />
-                {errors.message && <p className="text-destructive text-sm mt-1">{errors.message.message}</p>}
+                {errors.message && (
+                  <p className="text-destructive text-sm mt-1">
+                    {errors.message.message}
+                  </p>
+                )}
               </div>
 
-              <Button type="submit" size="lg" className="w-full shadow-glow group" disabled={isSubmitting}>
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full shadow-glow group"
+                disabled={isSubmitting}
+              >
                 <Send className="mr-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 {isSubmitting ? "Skickar..." : "Boka gratis genomgång"}
               </Button>
