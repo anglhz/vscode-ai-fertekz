@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const n8nWebhookUrl = Deno.env.get("N8N_CONTACT_WEBHOOK_URL") ??
   "https://n8n.fertekz.com/webhook/contact-forms";
 
@@ -175,24 +175,30 @@ const handler = async (req: Request): Promise<Response> => {
     const safeSubject = escapeHtml(subject);
     const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
 
-    // Send email to tommy@fertekz.com with escaped content
-    await resend.emails.send({
-      from: "Fertekz IT <onboarding@resend.dev>",
-      to: ["tommy@fertekz.com"],
-      subject: `Nytt meddelande från ${safeName}: ${safeSubject}`,
-      html: `
-        <h2>Nytt meddelande från kontaktformuläret</h2>
-        <p><strong>Namn:</strong> ${safeName}</p>
-        <p><strong>Email:</strong> ${safeEmail}</p>
-        <p><strong>Ämne:</strong> ${safeSubject}</p>
-        <p><strong>Meddelande:</strong></p>
-        <p>${safeMessage}</p>
-        <hr>
-        <p><em>Detta meddelande skickades från Fertekz IT kontaktformulär</em></p>
-      `,
-    });
-
-    console.log("Security Event - Email sent successfully to tommy@fertekz.com");
+    // Resend is an optional secondary delivery channel. Keeping its
+    // initialization inside the handler prevents a missing key from crashing
+    // CORS preflight requests before the handler starts.
+    if (resendApiKey) {
+      const resend = new Resend(resendApiKey);
+      await resend.emails.send({
+        from: "Fertekz IT <onboarding@resend.dev>",
+        to: ["tommy@fertekz.com"],
+        subject: `Nytt meddelande från ${safeName}: ${safeSubject}`,
+        html: `
+          <h2>Nytt meddelande från kontaktformuläret</h2>
+          <p><strong>Namn:</strong> ${safeName}</p>
+          <p><strong>Email:</strong> ${safeEmail}</p>
+          <p><strong>Ämne:</strong> ${safeSubject}</p>
+          <p><strong>Meddelande:</strong></p>
+          <p>${safeMessage}</p>
+          <hr>
+          <p><em>Detta meddelande skickades från Fertekz IT kontaktformulär</em></p>
+        `,
+      });
+      console.log("Security Event - Email sent successfully to tommy@fertekz.com");
+    } else {
+      console.log("RESEND_API_KEY is not configured; delivering through n8n only");
+    }
 
     // Forward validated data server-to-server to avoid browser CORS failures.
     const n8nResponse = await fetch(n8nWebhookUrl, {
