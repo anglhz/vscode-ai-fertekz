@@ -2,6 +2,8 @@ import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
 const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+const n8nWebhookUrl = Deno.env.get("N8N_CONTACT_WEBHOOK_URL") ??
+  "https://n8n.fertekz.com/webhook/contact-forms";
 
 // CORS headers - allow preview domains and production
 const corsHeaders = {
@@ -25,6 +27,7 @@ interface ContactEmailRequest {
   email: string;
   subject: string;
   message: string;
+  site?: string;
 }
 
 // HTML escape function to prevent injection attacks
@@ -155,7 +158,7 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    const { name, email, subject, message } = requestData;
+    const { name, email, subject, message, site } = requestData;
 
     // Secure logging - don't log full content, just metadata
     console.log("Processing contact form submission:", { 
@@ -173,7 +176,7 @@ const handler = async (req: Request): Promise<Response> => {
     const safeMessage = escapeHtml(message).replace(/\n/g, '<br>');
 
     // Send email to tommy@fertekz.com with escaped content
-    const emailResponse = await resend.emails.send({
+    await resend.emails.send({
       from: "Fertekz IT <onboarding@resend.dev>",
       to: ["tommy@fertekz.com"],
       subject: `Nytt meddelande från ${safeName}: ${safeSubject}`,
@@ -190,6 +193,30 @@ const handler = async (req: Request): Promise<Response> => {
     });
 
     console.log("Security Event - Email sent successfully to tommy@fertekz.com");
+
+    // Forward validated data server-to-server to avoid browser CORS failures.
+    const n8nResponse = await fetch(n8nWebhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        website: site || "fertekz.com",
+        type: "contact_form",
+        name,
+        email,
+        subject,
+        message,
+        timestamp: new Date().toISOString(),
+      }),
+    });
+
+    if (!n8nResponse.ok) {
+      const responseText = await n8nResponse.text();
+      console.error("n8n contact webhook failed", {
+        status: n8nResponse.status,
+        response: responseText.slice(0, 500),
+      });
+      throw new Error(`n8n webhook returned ${n8nResponse.status}`);
+    }
 
     // Don't return sensitive email response data
     return new Response(JSON.stringify({ success: true, message: "Email sent successfully" }), {
