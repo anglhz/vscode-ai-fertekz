@@ -11,8 +11,11 @@ const SubscriptionSuccess = () => (
       <CheckCircle className="h-16 w-16 text-primary mx-auto mb-6" />
       <h1 className="text-3xl font-bold mb-4">Tack för din beställning!</h1>
       <p className="text-muted-foreground mb-3">Första månaden är betald och en bekräftelse skickas till din e-post.</p>
-      <p className="text-muted-foreground mb-8">Nästa steg är att samla in information, färger, texter och bilder till hemsidan. Jag kontaktar dig med materialformuläret.</p>
-      <Button asChild><Link to="/">Till startsidan</Link></Button>
+      <p className="text-muted-foreground mb-8">Nästa steg är att samla in information, färger, texter och bilder till hemsidan. Fyll gärna i materialformuläret direkt.</p>
+      <div className="flex flex-col sm:flex-row justify-center gap-3">
+        <Button asChild><Link to="/material">Fyll i materialformuläret</Link></Button>
+        <Button asChild variant="outline"><Link to="/">Till startsidan</Link></Button>
+      </div>
     </Card>
   </main>
 );

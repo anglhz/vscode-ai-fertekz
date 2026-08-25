@@ -13,6 +13,7 @@ const Auth = lazy(() => import("./pages/Auth"));
 const AdminSeo = lazy(() => import("./pages/AdminSeo"));
 const StartSubscription = lazy(() => import("./pages/StartSubscription"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
+const MaterialForm = lazy(() => import("./pages/MaterialForm"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
 const DemoSite = lazy(() => import("./pages/DemoSite"));
 const LandingPage = lazy(() => import("./components/LandingPage"));
@@ -83,6 +84,7 @@ const App = () => (
           <Route path="/admin/seo" element={<AdminSeo />} />
           <Route path="/starta" element={<StartSubscription />} />
           <Route path="/starta/klart" element={<SubscriptionSuccess />} />
+          <Route path="/material" element={<MaterialForm />} />
           <Route path="/projekt" element={<ProjectsPage />} />
           <Route path="/demo/frisorsalong" element={<DemoSite kind="frisorsalong" />} />
           <Route path="/demo/byggforetag" element={<DemoSite kind="byggforetag" />} />
