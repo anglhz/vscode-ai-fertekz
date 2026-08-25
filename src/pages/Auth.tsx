@@ -22,12 +22,12 @@ const Auth = () => {
       if (mode === "login") {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
-        navigate("/admin/seo");
+        navigate("/admin");
       } else {
         const { error } = await supabase.auth.signUp({
           email,
           password,
-          options: { emailRedirectTo: `${window.location.origin}/admin/seo` },
+          options: { emailRedirectTo: `${window.location.origin}/admin` },
         });
         if (error) throw error;
         toast.success("Konto skapat – bekräfta din e-post för att logga in.");
@@ -48,7 +48,7 @@ const Auth = () => {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{mode === "login" ? "Logga in" : "Skapa konto"}</CardTitle>
-          <CardDescription>Åtkomst till SEO-panelen.</CardDescription>
+          <CardDescription>Åtkomst till adminportalen.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="space-y-4">

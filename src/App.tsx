@@ -10,6 +10,7 @@ import { caseStudies } from "./content/caseStudies";
 
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Auth = lazy(() => import("./pages/Auth"));
+const AdminPortal = lazy(() => import("./pages/AdminPortal"));
 const AdminSeo = lazy(() => import("./pages/AdminSeo"));
 const StartSubscription = lazy(() => import("./pages/StartSubscription"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
@@ -81,6 +82,7 @@ const App = () => (
           <Route path="/projekt/codbase" element={<CaseStudy study={caseStudies["codbase"]} />} />
 
           <Route path="/auth" element={<Auth />} />
+          <Route path="/admin" element={<AdminPortal />} />
           <Route path="/admin/seo" element={<AdminSeo />} />
           <Route path="/starta" element={<StartSubscription />} />
           <Route path="/starta/klart" element={<SubscriptionSuccess />} />

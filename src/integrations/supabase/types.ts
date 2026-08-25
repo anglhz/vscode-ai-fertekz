@@ -14,6 +14,141 @@ export type Database = {
   }
   public: {
     Tables: {
+      customers: {
+        Row: {
+          checklist: Json
+          company_name: string
+          contact_name: string
+          created_at: string
+          email: string
+          id: string
+          notes: string | null
+          organization_number: string | null
+          package_id: string | null
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          checklist?: Json
+          company_name: string
+          contact_name: string
+          created_at?: string
+          email: string
+          id?: string
+          notes?: string | null
+          organization_number?: string | null
+          package_id?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          checklist?: Json
+          company_name?: string
+          contact_name?: string
+          created_at?: string
+          email?: string
+          id?: string
+          notes?: string | null
+          organization_number?: string | null
+          package_id?: string | null
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      material_submissions: {
+        Row: {
+          additional_notes: string | null
+          brand_colors: string | null
+          business_description: string
+          company_name: string
+          contact_name: string
+          content_notes: string | null
+          created_at: string
+          customer_id: string | null
+          desired_pages: string
+          design_preferences: string | null
+          differentiators: string | null
+          display_contact_details: string | null
+          email: string
+          existing_website: string | null
+          id: string
+          inspiration_sites: string | null
+          material_link: string | null
+          organization_number: string | null
+          package_id: string | null
+          phone: string | null
+          primary_cta: string | null
+          service_area: string | null
+          services: string
+          social_links: string | null
+          status: string
+          target_audience: string
+          website_goals: string
+        }
+        Insert: {
+          additional_notes?: string | null
+          brand_colors?: string | null
+          business_description: string
+          company_name: string
+          contact_name: string
+          content_notes?: string | null
+          created_at?: string
+          customer_id?: string | null
+          desired_pages: string
+          design_preferences?: string | null
+          differentiators?: string | null
+          display_contact_details?: string | null
+          email: string
+          existing_website?: string | null
+          id?: string
+          inspiration_sites?: string | null
+          material_link?: string | null
+          organization_number?: string | null
+          package_id?: string | null
+          phone?: string | null
+          primary_cta?: string | null
+          service_area?: string | null
+          services: string
+          social_links?: string | null
+          status?: string
+          target_audience: string
+          website_goals: string
+        }
+        Update: {
+          additional_notes?: string | null
+          brand_colors?: string | null
+          business_description?: string
+          company_name?: string
+          contact_name?: string
+          content_notes?: string | null
+          created_at?: string
+          customer_id?: string | null
+          desired_pages?: string
+          design_preferences?: string | null
+          differentiators?: string | null
+          display_contact_details?: string | null
+          email?: string
+          existing_website?: string | null
+          id?: string
+          inspiration_sites?: string | null
+          material_link?: string | null
+          organization_number?: string | null
+          package_id?: string | null
+          phone?: string | null
+          primary_cta?: string | null
+          service_area?: string | null
+          services?: string
+          social_links?: string | null
+          status?: string
+          target_audience?: string
+          website_goals?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string

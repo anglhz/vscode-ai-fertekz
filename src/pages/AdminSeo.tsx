@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import WebVitalsPanel from "@/components/seo/WebVitalsPanel";
@@ -26,7 +26,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { RefreshCw, LogOut } from "lucide-react";
+import { RefreshCw, LogOut, Users } from "lucide-react";
 import { toast } from "sonner";
 
 type SearchRow = { keys: string[]; clicks: number; impressions: number; ctr: number; position: number };
@@ -150,6 +150,12 @@ const AdminSeo = () => {
             </p>
           </div>
           <div className="flex items-center gap-2">
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin">
+                <Users className="h-4 w-4" />
+                <span className="ml-2 hidden sm:inline">Kunder & lathund</span>
+              </Link>
+            </Button>
             <div className="flex rounded-md border border-border overflow-hidden">
               {RANGES.map((r) => (
                 <button

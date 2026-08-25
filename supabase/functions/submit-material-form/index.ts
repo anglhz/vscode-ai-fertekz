@@ -83,9 +83,24 @@ Deno.serve(async (request) => {
     const supabase = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false, autoRefreshToken: false },
     });
+    const { data: customer, error: customerError } = await supabase
+      .from("customers")
+      .upsert({
+        company_name: submission.company_name,
+        organization_number: submission.organization_number,
+        contact_name: submission.contact_name,
+        email: submission.email,
+        phone: submission.phone,
+        package_id: submission.package_id,
+      updated_at: new Date().toISOString(),
+      }, { onConflict: "email" })
+      .select("id")
+      .single();
+    if (customerError) throw customerError;
+
     const { data, error } = await supabase
       .from("material_submissions")
-      .insert(submission)
+      .insert({ ...submission, customer_id: customer.id })
       .select("id")
       .single();
     if (error) throw error;
