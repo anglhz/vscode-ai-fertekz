@@ -34,7 +34,7 @@ const Hero = () => {
             </div>
             
             <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-6 text-sm text-muted-foreground">
-              {["Mobilanpassad", "SEO-redo", "Support ingår"].map((item) => (
+              {["Mobilanpassad", "SEO-redo", "Support ingår", "Godkänd för FA-skatt"].map((item) => (
                 <span key={item} className="flex items-center gap-1.5"><Check className="h-4 w-4 text-primary" />{item}</span>
               ))}
             </div>

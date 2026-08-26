@@ -66,6 +66,7 @@ const Footer = () => {
               Webbutvecklare och webbdesigner i Eskilstuna. Moderna, snabba och mobilanpassade
               hemsidor för företag i Sörmland och Mälardalen.
             </p>
+            <p className="text-sm text-muted-foreground mb-5">Godkänd för FA-skatt</p>
 
             {/* Social Media Links */}
             <div className="flex gap-4">
