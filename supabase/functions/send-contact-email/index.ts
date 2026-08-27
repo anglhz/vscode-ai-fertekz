@@ -205,9 +205,10 @@ const handler = async (req: Request): Promise<Response> => {
     // CORS preflight requests before the handler starts.
     if (resendApiKey) {
       const resend = new Resend(resendApiKey);
-      await resend.emails.send({
-        from: "Fertekz IT <onboarding@resend.dev>",
+      const { error: resendError } = await resend.emails.send({
+        from: "Fertekz IT <tommy@fertekz.com>",
         to: ["tommy@fertekz.com"],
+        reply_to: email,
         subject: `Nytt meddelande från ${safeName}: ${safeSubject}`,
         html: `
           <h2>Nytt meddelande från kontaktformuläret</h2>
@@ -220,7 +221,11 @@ const handler = async (req: Request): Promise<Response> => {
           <p><em>Detta meddelande skickades från Fertekz IT kontaktformulär</em></p>
         `,
       });
-      console.log("Security Event - Email sent successfully to tommy@fertekz.com");
+      if (resendError) {
+        console.error("Resend delivery failed", resendError);
+      } else {
+        console.log("Security Event - Email sent successfully to tommy@fertekz.com");
+      }
     } else {
       console.log("RESEND_API_KEY is not configured; delivering through n8n only");
     }
