@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { BadgeCheck, Handshake, PiggyBank, RefreshCw, ShieldCheck, UserRoundCheck } from "lucide-react";
+import { PiggyBank, RefreshCw, UserRoundCheck } from "lucide-react";
 
 const reasons = [
   {
@@ -17,25 +17,10 @@ const reasons = [
     title: "En personlig kontakt",
     description: "Du har direktkontakt med personen som lär känna verksamheten, bygger sidan och hjälper dig efter lanseringen.",
   },
-  {
-    icon: ShieldCheck,
-    title: "Tydligt och förutsägbart",
-    description: "Ett fast månadspris gör kostnaden enkel att planera. Du ser i förväg vad som ingår och slipper oväntade teknikfakturor.",
-  },
-  {
-    icon: Handshake,
-    title: "Ett långsiktigt samarbete",
-    description: "Modellen ger mig ett tydligt ansvar även efter publicering – inte bara fram till dagen då hemsidan lanseras.",
-  },
-  {
-    icon: BadgeCheck,
-    title: "Trygg svensk leverantör",
-    description: "Fertekz IT är godkänd för FA-skatt och erbjuder support på svenska med tydliga villkor.",
-  },
 ];
 
 const WhyFertekz = () => (
-  <section className="py-20" aria-labelledby="why-fertekz-heading">
+  <section className="py-16" id="about" aria-labelledby="why-fertekz-heading">
     <div className="container mx-auto px-6">
       <div className="text-center max-w-3xl mx-auto mb-12 reveal">
         <p className="text-sm font-semibold uppercase tracking-wider text-primary mb-3">Därför Fertekz IT</p>
@@ -47,7 +32,7 @@ const WhyFertekz = () => (
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid md:grid-cols-3 gap-6">
         {reasons.map((reason, index) => {
           const Icon = reason.icon;
           return (

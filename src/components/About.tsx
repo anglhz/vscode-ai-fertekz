@@ -67,18 +67,6 @@ const faqs = [
     question: "Finns det någon bindningstid?",
     answer: "Nej. Abonnemanget har en månads uppsägningstid och du kan byta paket när dina behov ändras.",
   },
-  {
-    question: "Vad ingår i månadspriset?",
-    answer: "Design, utveckling, hosting, SSL, backup, löpande tekniskt underhåll, support och det antal mindre ändringar som anges i ditt paket.",
-  },
-  {
-    question: "Vem äger domänen och mitt material?",
-    answer: "Du äger alltid domänen och ditt eget material, som bilder, texter och logotyp. Webbplatsen tillhandahålls som en tjänst medan abonnemanget är aktivt.",
-  },
-  {
-    question: "Vad räknas som en mindre ändring?",
-    answer: "Till exempel att byta en text, bild, öppettid eller kontaktuppgift. Nya funktioner eller större ombyggnader prissätts separat innan arbetet börjar.",
-  },
 ];
 
 const startCheckout = (packageId: string) => {
@@ -137,26 +125,6 @@ const About = () => (
         Alla priser är exklusive moms. Ingen startavgift. Månadsvis betalning i förskott och en månads uppsägningstid. Domänkostnad tillkommer.
       </p>
 
-      <div id="about" className="grid lg:grid-cols-2 gap-12 items-start mb-20 reveal">
-        <div>
-          <h2 className="text-3xl font-bold mb-5">Personlig hjälp hela vägen</h2>
-          <p className="text-muted-foreground mb-4">
-            Jag heter Tommy och driver Fertekz IT i Eskilstuna. Du får en direkt kontakt som lär känna verksamheten, bygger sidan och fortsätter ta hand om den efter lanseringen.
-          </p>
-          <p className="text-muted-foreground">
-            Har du inga färdiga texter eller bilder hjälper jag dig att skapa en professionell grund. Allt byggs för mobil, snabb laddning och tydlig synlighet på Google.
-          </p>
-        </div>
-        <Card className="p-7 gradient-card">
-          <h3 className="text-xl font-semibold mb-4">Det här ingår alltid</h3>
-          <div className="flex flex-wrap gap-2">
-            {["Mobilanpassning", "Grundläggande SEO", "Hosting & SSL", "Backup", "Support på svenska", "Löpande underhåll"].map((value) => (
-              <Badge key={value} variant="secondary" className="py-2 px-3">{value}</Badge>
-            ))}
-          </div>
-        </Card>
-      </div>
-
       <div className="max-w-3xl mx-auto">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold mb-4">Vanliga frågor</h2>
@@ -164,10 +132,12 @@ const About = () => (
         </div>
         <div className="space-y-4">
           {faqs.map((faq) => (
-            <Card key={faq.question} className="p-6 gradient-card">
-              <h3 className="font-semibold text-lg mb-2">{faq.question}</h3>
-              <p className="text-muted-foreground">{faq.answer}</p>
-            </Card>
+            <details key={faq.question} className="group rounded-lg border border-border gradient-card">
+              <summary className="cursor-pointer list-none p-5 font-semibold flex items-center justify-between">
+                {faq.question}<span className="text-primary text-xl group-open:rotate-45 transition-transform">+</span>
+              </summary>
+              <p className="px-5 pb-5 text-muted-foreground">{faq.answer}</p>
+            </details>
           ))}
         </div>
       </div>

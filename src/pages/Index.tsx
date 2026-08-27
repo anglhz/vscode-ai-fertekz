@@ -55,8 +55,8 @@ const Index = () => {
         <Hero />
       </div>
       
-      <About />
       <WhyFertekz />
+      <About />
       <ExampleSites />
       <Process />
       {/* <Testimonials /> */}

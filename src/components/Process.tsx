@@ -1,13 +1,11 @@
 import { Card } from "@/components/ui/card";
-import { CheckCircle, ClipboardList, CreditCard, Eye, Palette, Rocket } from "lucide-react";
+import { ClipboardList, CreditCard, Palette, Rocket } from "lucide-react";
 
 const steps = [
-  { icon: CreditCard, title: "Välj abonnemang", description: "Välj Start, Företag eller Pro utifrån hur mycket innehåll och löpande hjälp du behöver." },
-  { icon: ClipboardList, title: "Betala första månaden", description: "Abonnemanget startar med en månads betalning i förskott. Ingen startavgift tillkommer." },
-  { icon: CheckCircle, title: "Skicka material", description: "Du svarar på några frågor om företaget och skickar logotyp, färger och bilder om du har." },
-  { icon: Palette, title: "Jag bygger", description: "Jag tar fram innehåll, design och teknik för en snabb, mobilanpassad och sökbar webbplats." },
-  { icon: Eye, title: "Du granskar", description: "Du får en privat förhandsvisning och kan lämna mindre justeringar före lansering." },
-  { icon: Rocket, title: "Publicering & support", description: "Sidan publiceras på din domän. Drift, backup, support och löpande ändringar fortsätter att ingå." },
+  { icon: CreditCard, title: "Välj abonnemang", description: "Välj paket och betala den första månaden säkert via Stripe. Ingen startavgift tillkommer." },
+  { icon: ClipboardList, title: "Skicka material", description: "Du svarar på några frågor om företaget och skickar logotyp, färger och bilder om du har." },
+  { icon: Palette, title: "Design och granskning", description: "Jag bygger sidan och du får en privat förhandsvisning för återkoppling före lansering." },
+  { icon: Rocket, title: "Publicering och support", description: "Sidan publiceras på din domän. Drift, backup, support och löpande ändringar fortsätter att ingå." },
 ];
 
 const Process = () => (
@@ -17,7 +15,7 @@ const Process = () => (
         <h2 className="text-4xl md:text-5xl font-bold mb-6">Från val till <span className="gradient-text">publicerad hemsida</span></h2>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto">En enkel process där du alltid vet vad nästa steg är.</p>
       </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
         {steps.map((step, index) => {
           const Icon = step.icon;
           return (
