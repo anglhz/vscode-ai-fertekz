@@ -16,6 +16,8 @@ const StartSubscription = lazy(() => import("./pages/StartSubscription"));
 const SubscriptionSuccess = lazy(() => import("./pages/SubscriptionSuccess"));
 const MaterialForm = lazy(() => import("./pages/MaterialForm"));
 const ManageSubscription = lazy(() => import("./pages/ManageSubscription"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
 const DemoSite = lazy(() => import("./pages/DemoSite"));
 const LandingPage = lazy(() => import("./components/LandingPage"));
@@ -89,6 +91,8 @@ const App = () => (
           <Route path="/starta/klart" element={<SubscriptionSuccess />} />
           <Route path="/material" element={<MaterialForm />} />
           <Route path="/hantera-abonnemang" element={<ManageSubscription />} />
+          <Route path="/integritetspolicy" element={<PrivacyPolicy />} />
+          <Route path="/tjanstevillkor" element={<TermsOfService />} />
           <Route path="/projekt" element={<ProjectsPage />} />
           <Route path="/demo/frisorsalong" element={<DemoSite kind="frisorsalong" />} />
           <Route path="/demo/byggforetag" element={<DemoSite kind="byggforetag" />} />

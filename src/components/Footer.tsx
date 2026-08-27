@@ -168,6 +168,14 @@ const Footer = () => {
             <p className="text-muted-foreground text-sm">
               © {currentYear} Fertekz IT. Alla rättigheter förbehållna.
             </p>
+            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2" aria-label="Juridisk information">
+              <Link to="/integritetspolicy" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                Integritetspolicy
+              </Link>
+              <Link to="/tjanstevillkor" className="text-sm text-muted-foreground transition-colors hover:text-primary">
+                Tjänstevillkor
+              </Link>
+            </nav>
             <div className="flex items-center gap-1 text-muted-foreground text-sm">
               <span>Skapad med</span>
               <Heart className="h-4 w-4 text-red-500 animate-pulse" />
