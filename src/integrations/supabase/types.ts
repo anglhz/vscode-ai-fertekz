@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      stripe_subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean
+          company: string | null
+          created_at: string
+          current_period_end: string | null
+          customer_email: string | null
+          id: string
+          package_id: string
+          status: string
+          stripe_checkout_session_id: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string
+          updated_at: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean
+          company?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          customer_email?: string | null
+          id?: string
+          package_id: string
+          status: string
+          stripe_checkout_session_id?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id: string
+          updated_at?: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean
+          company?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          customer_email?: string | null
+          id?: string
+          package_id?: string
+          status?: string
+          stripe_checkout_session_id?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           checklist: Json

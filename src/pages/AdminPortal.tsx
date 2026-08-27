@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  BookOpen, Check, CheckCircle2, ClipboardCheck, ExternalLink, FileText, LogOut,
+  BookOpen, Check, CheckCircle2, ClipboardCheck, Copy, CreditCard, ExternalLink, FileText, LogOut,
   Mail, MessageSquareText, Phone, RefreshCw, Search, Trash2, Users,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ import {
 
 type Customer = Tables<"customers">;
 type Material = Tables<"material_submissions">;
+type Subscription = Tables<"stripe_subscriptions">;
 
 const statuses = {
   material_received: "Material mottaget",
@@ -101,6 +102,7 @@ const AdminPortal = () => {
   const { user, isAdmin, loading } = useAuth();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [materials, setMaterials] = useState<Material[]>([]);
+  const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [fetching, setFetching] = useState(false);
@@ -113,17 +115,19 @@ const AdminPortal = () => {
 
   const load = async () => {
     setFetching(true);
-    const [customerResult, materialResult] = await Promise.all([
+    const [customerResult, materialResult, subscriptionResult] = await Promise.all([
       supabase.from("customers").select("*").order("updated_at", { ascending: false }),
       supabase.from("material_submissions").select("*").order("created_at", { ascending: false }),
+      supabase.from("stripe_subscriptions").select("*").order("created_at", { ascending: false }),
     ]);
     setFetching(false);
-    if (customerResult.error || materialResult.error) {
-      toast.error(customerResult.error?.message ?? materialResult.error?.message ?? "Kunde inte hämta kunder");
+    if (customerResult.error || materialResult.error || subscriptionResult.error) {
+      toast.error(customerResult.error?.message ?? materialResult.error?.message ?? subscriptionResult.error?.message ?? "Kunde inte hämta kunder");
       return;
     }
     setCustomers(customerResult.data ?? []);
     setMaterials(materialResult.data ?? []);
+    setSubscriptions(subscriptionResult.data ?? []);
     setSelectedId((current) => current ?? customerResult.data?.[0]?.id ?? null);
   };
 
@@ -205,6 +209,7 @@ const AdminPortal = () => {
         <Tabs defaultValue="customers" className="space-y-6">
           <TabsList className="h-auto flex-wrap justify-start">
             <TabsTrigger value="customers">Kunder och material</TabsTrigger>
+            <TabsTrigger value="orders">Betalda beställningar</TabsTrigger>
             <TabsTrigger value="delivery">Lathund: kundleverans</TabsTrigger>
             <TabsTrigger value="meeting">Lathund: informationsmöte</TabsTrigger>
             <TabsTrigger value="operations">Lathund: drift & kundägande</TabsTrigger>
@@ -291,6 +296,54 @@ const AdminPortal = () => {
                 </div>
               )}
             </div>
+          </TabsContent>
+
+          <TabsContent value="orders">
+            <Card>
+              <CardHeader>
+                <CreditCard className="h-9 w-9 text-primary mb-3" />
+                <CardTitle className="text-2xl">Betalda beställningar och materiallänkar</CardTitle>
+                <CardDescription>Kopiera eller mejla länken när kunden är redo att lämna sitt material.</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {subscriptions.length === 0 && <p className="text-sm text-muted-foreground">Inga Stripe-beställningar hittades.</p>}
+                {subscriptions.map((subscription) => {
+                  const sessionId = subscription.stripe_checkout_session_id;
+                  const submitted = sessionId ? materials.some((material) => material.stripe_checkout_session_id === sessionId) : false;
+                  const materialUrl = sessionId ? `${window.location.origin}/material?session_id=${encodeURIComponent(sessionId)}` : "";
+                  const mailHref = subscription.customer_email && materialUrl
+                    ? `mailto:${subscription.customer_email}?subject=${encodeURIComponent("Material till din nya hemsida")}&body=${encodeURIComponent(`Hej!\n\nNär du är redo kan du fylla i materialet till din nya hemsida här:\n${materialUrl}\n\nVänliga hälsningar\nFertekz IT`)}`
+                    : "";
+
+                  return (
+                    <div key={subscription.id} className="rounded-lg border border-border p-5 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2 mb-1">
+                          <h3 className="font-semibold truncate">{subscription.company || "Företag saknas"}</h3>
+                          <Badge variant={submitted ? "secondary" : "default"}>{submitted ? "Material mottaget" : "Väntar på material"}</Badge>
+                          <Badge variant="outline">{packageLabel(subscription.package_id)}</Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground break-all">{subscription.customer_email || "E-post saknas"}</p>
+                        <p className="text-xs text-muted-foreground mt-1">Beställd {formatDate(subscription.created_at)} · Stripe-status: {subscription.status}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2 shrink-0">
+                        <Button
+                          variant="outline"
+                          disabled={!materialUrl || submitted}
+                          onClick={async () => {
+                            await navigator.clipboard.writeText(materialUrl);
+                            toast.success("Materiallänken har kopierats");
+                          }}
+                        >
+                          <Copy className="h-4 w-4 mr-2" />Kopiera länk
+                        </Button>
+                        {mailHref && !submitted && <Button asChild><a href={mailHref}><Mail className="h-4 w-4 mr-2" />Skicka via e-post</a></Button>}
+                      </div>
+                    </div>
+                  );
+                })}
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="delivery"><Guide title="Kundgenomgång – från material till lansering" description="Använd frågorna i kickoffen och inför varje viktig avstämning." items={customerGuide} /></TabsContent>
