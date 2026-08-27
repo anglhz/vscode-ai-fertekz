@@ -63,7 +63,7 @@ const MaterialForm = () => {
       body: { ...data, consent },
     });
     if (invokeError || !response?.success) {
-      setError(response?.error ?? invokeError?.message ?? "Materialet kunde inte skickas. Försök igen.");
+      setError(response?.error ?? await edgeFunctionError(invokeError) ?? "Materialet kunde inte skickas. Försök igen.");
       setLoading(false);
       return;
     }
@@ -182,6 +182,22 @@ const MaterialForm = () => {
       </div>
     </main>
   );
+};
+
+const edgeFunctionError = async (error: unknown) => {
+  if (!error || typeof error !== "object" || !("context" in error)) {
+    return error instanceof Error ? error.message : null;
+  }
+
+  const context = (error as { context?: unknown }).context;
+  if (!(context instanceof Response)) return error instanceof Error ? error.message : null;
+
+  try {
+    const body = await context.clone().json() as { error?: unknown };
+    return typeof body.error === "string" ? body.error : error instanceof Error ? error.message : null;
+  } catch {
+    return error instanceof Error ? error.message : null;
+  }
 };
 
 const SectionTitle = ({ icon: Icon, number, title }: { icon: typeof Building2; number: string; title: string }) => (

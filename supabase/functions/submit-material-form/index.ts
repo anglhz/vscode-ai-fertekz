@@ -92,18 +92,24 @@ Deno.serve(async (request) => {
         email: submission.email,
         phone: submission.phone,
         package_id: submission.package_id,
-      updated_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
       }, { onConflict: "email" })
       .select("id")
       .single();
-    if (customerError) throw customerError;
+    if (customerError) {
+      console.error("submit-material-form customer", customerError);
+      return json({ error: "Kunduppgifterna kunde inte sparas", code: "CUSTOMER_SAVE_FAILED" }, 500, origin);
+    }
 
     const { data, error } = await supabase
       .from("material_submissions")
       .insert({ ...submission, customer_id: customer.id })
       .select("id")
       .single();
-    if (error) throw error;
+    if (error) {
+      console.error("submit-material-form material", error);
+      return json({ error: "Materialuppgifterna kunde inte sparas", code: "MATERIAL_SAVE_FAILED" }, 500, origin);
+    }
 
     rateLimits.set(ip, Date.now());
 
