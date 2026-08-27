@@ -1,0 +1,97 @@
+{
+  "name": "Fertekz Material Form → Telegram",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "material-forms",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "b7f18e4a-1001-4000-8000-000000000001",
+      "name": "Material Form Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [-240, 0],
+      "webhookId": "fertekz-material-forms",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_HEADER_AUTH_CREDENTIAL_ID",
+          "name": "Fertekz Material Webhook Secret"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $json.body ?? $json;\n\nif (body.type !== 'material_form' || !body.submissionId || !body.company_name || !body.email) {\n  throw new Error('Ogiltig material-payload');\n}\n\nconst packageNames = { start: 'Start', foretag: 'Företag', pro: 'Pro' };\nconst clean = (value, max = 300) => String(value ?? '').replace(/[<>]/g, '').trim().slice(0, max);\nconst company = clean(body.company_name, 120);\nconst contact = clean(body.contact_name, 120);\nconst email = clean(body.email, 254);\nconst phone = clean(body.phone, 40);\nconst packageName = packageNames[body.package_id] ?? clean(body.package_id, 30) ?? 'Okänt';\nconst materialLink = clean(body.material_link, 1000);\n\nconst lines = [\n  '📦 Nytt material till hemsida',\n  '',\n  `Företag: ${company}`,\n  `Kontakt: ${contact}`,\n  `E-post: ${email}`,\n  phone ? `Telefon: ${phone}` : null,\n  `Paket: ${packageName}`,\n  `Submission ID: ${clean(body.submissionId, 100)}`,\n  '',\n  materialLink ? `Materialmapp: ${materialLink}` : 'Materialmapp: Ingen länk angiven',\n  '',\n  'Öppna kunden i adminpanelen:',\n  'https://fertekz.com/admin'\n].filter(Boolean);\n\nreturn [{ json: { message: lines.join('\\n'), submissionId: body.submissionId } }];"
+      },
+      "id": "b7f18e4a-1002-4000-8000-000000000002",
+      "name": "Validate and Format Notification",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_TELEGRAM_CHAT_ID",
+        "text": "={{ $json.message }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "b7f18e4a-1003-4000-8000-000000000003",
+      "name": "Send Telegram Notification",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [260, 0],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"submissionId\": $json.submissionId } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "b7f18e4a-1004-4000-8000-000000000004",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [520, 0]
+    }
+  ],
+  "connections": {
+    "Material Form Webhook": {
+      "main": [[{
+        "node": "Validate and Format Notification",
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "Validate and Format Notification": {
+      "main": [[{
+        "node": "Send Telegram Notification",
+        "type": "main",
+        "index": 0
+      }]]
+    },
+    "Send Telegram Notification": {
+      "main": [[{
+        "node": "Respond Success",
+        "type": "main",
+        "index": 0
+      }]]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -12,6 +12,7 @@ const allowedOrigins = new Set([
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const n8nWebhookUrl = Deno.env.get("N8N_MATERIAL_WEBHOOK_URL");
+const n8nWebhookSecret = Deno.env.get("N8N_MATERIAL_WEBHOOK_SECRET");
 const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
 
 const corsHeaders = (origin: string) => ({
@@ -165,17 +166,22 @@ Deno.serve(async (request) => {
 
     rateLimits.set(ip, Date.now());
 
-    if (n8nWebhookUrl) {
+    if (n8nWebhookUrl && n8nWebhookSecret) {
       try {
         const response = await fetch(n8nWebhookUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "X-Fertekz-Webhook-Secret": n8nWebhookSecret,
+          },
           body: JSON.stringify({ type: "material_form", submissionId: data.id, ...submission }),
         });
         if (!response.ok) console.error("n8n material webhook returned", response.status);
       } catch (error) {
         console.error("n8n material webhook failed", error);
       }
+    } else if (n8nWebhookUrl) {
+      console.error("N8N_MATERIAL_WEBHOOK_SECRET is missing; material notification skipped");
     }
 
     return json({ success: true, submissionId: data.id }, 200, origin);
