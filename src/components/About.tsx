@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Check, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import SubscriptionDecisionDialog from "@/components/SubscriptionDecisionDialog";
 
 const packages = [
   {
@@ -69,11 +71,11 @@ const faqs = [
   },
 ];
 
-const startCheckout = (packageId: string) => {
-  window.location.assign(`/starta?paket=${packageId}`);
-};
+const About = () => {
+  const [selectedPackage, setSelectedPackage] = useState<{ id: string; name: string } | null>(null);
 
-const About = () => (
+  return (
+  <>
   <section className="py-20 bg-section-bg" id="services">
     <div className="container mx-auto px-6">
       <div className="text-center mb-14 reveal">
@@ -113,7 +115,7 @@ const About = () => (
                   </li>
                 ))}
               </ul>
-              <Button className="w-full shadow-glow" variant={item.popular ? "default" : "outline"} onClick={() => startCheckout(item.id)}>
+              <Button className="w-full shadow-glow" variant={item.popular ? "default" : "outline"} onClick={() => setSelectedPackage({ id: item.id, name: item.name })}>
                 Starta {item.name}
               </Button>
             </Card>
@@ -143,6 +145,9 @@ const About = () => (
       </div>
     </div>
   </section>
-);
+  <SubscriptionDecisionDialog selected={selectedPackage} onClose={() => setSelectedPackage(null)} />
+  </>
+  );
+};
 
 export default About;

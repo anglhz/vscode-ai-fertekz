@@ -73,6 +73,18 @@ const meetingGuide = [
   ["9. Nästa steg", "Sammanfatta behovet och boka nästa konkreta aktivitet innan mötet avslutas."],
 ];
 
+const operationsGuide = [
+  ["Domän och ägande", "Domänen registreras och betalas av kunden i kundens eget namn. Fertekz IT får teknisk åtkomst för DNS och publicering."],
+  ["DNS och skydd", "Använd Cloudflare för DNS, proxy, cache och grundläggande skydd. Webbtrafik proxas; MX- och verifieringsposter för e-post ska vara DNS only."],
+  ["Hosting", "Publicera webbplatsen separat per kund på Hetzner-servern. Dokumentera domän, vhost, sökväg, GitHub-repo och driftsättningsmetod."],
+  ["SSL", "Använd ett giltigt certifikat på origin-servern och Cloudflare i läget Full (strict). Kontrollera automatisk förnyelse och både www- och huvuddomän."],
+  ["Extern backup", "Ta daglig krypterad backup till Hetzner Storage Box eller annan separat lagring. Behåll 30 dagliga och 12 månatliga kopior och provåterställ kvartalsvis."],
+  ["E-post", "Hosta inte kundens e-post på webbservern. Rekommendera Microsoft 365 Business Basic eller Google Workspace; kunden äger och betalar licenserna."],
+  ["Microsoft 365 och domän", "Verifiera kundens domän i Microsoft 365 och lägg in Microsofts MX-, SPF- och DKIM-poster i DNS. Därefter kan kunden använda adresser som namn@kundensdomän.se."],
+  ["Vad abonnemanget omfattar", "Hosting, SSL, tekniskt underhåll och extern backup ingår inom rimlig trafik och lagring. Domän, e-postlicenser och större specialfunktioner tillkommer."],
+  ["Vid uppsägning", "Bekräfta slutdatum, lämna ut kundens material och åtkomster, dokumentera domän/DNS och ange hur länge sista backupen behålls. Radera personuppgifter enligt villkoren."],
+];
+
 const AdminPortal = () => {
   const navigate = useNavigate();
   const { user, isAdmin, loading } = useAuth();
@@ -184,6 +196,7 @@ const AdminPortal = () => {
             <TabsTrigger value="customers">Kunder och material</TabsTrigger>
             <TabsTrigger value="delivery">Lathund: kundleverans</TabsTrigger>
             <TabsTrigger value="meeting">Lathund: informationsmöte</TabsTrigger>
+            <TabsTrigger value="operations">Lathund: drift & kundägande</TabsTrigger>
           </TabsList>
 
           <TabsContent value="customers">
@@ -270,6 +283,7 @@ const AdminPortal = () => {
 
           <TabsContent value="delivery"><Guide title="Kundgenomgång – från material till lansering" description="Använd frågorna i kickoffen och inför varje viktig avstämning." items={customerGuide} /></TabsContent>
           <TabsContent value="meeting"><Guide title="Informationsmöte – första samtalet" description="En enkel struktur för att förstå behovet och hjälpa kunden välja rätt nästa steg." items={meetingGuide} /></TabsContent>
+          <TabsContent value="operations"><Guide title="Drift, domän, backup och e-post" description="Standardupplägget för en trygg leverans med tydligt ägande och ansvar." items={operationsGuide} /></TabsContent>
         </Tabs>
       </div>
     </div>
