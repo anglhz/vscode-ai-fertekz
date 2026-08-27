@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BriefcaseBusiness, Gauge, PenTool } from "lucide-react";
+import { ArrowRight, Gauge, PenTool } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,7 +9,7 @@ type ExampleKind = "tattoo" | "builder" | "consultant";
 const examples: { kind: ExampleKind; category: string; title: string; description: string; href: string }[] = [
   { kind: "tattoo", category: "Tatueringsstudio", title: "Obsidian Ink", description: "Mörk och exklusiv studiosida med portfolio, information om studion och tydliga vägar till bokning.", href: "https://obsidian-ink.fertekz.com" },
   { kind: "builder", category: "Energi och fastighet", title: "Nordhamn Energioptimering", description: "Teknisk och förtroendeingivande företagssida med tjänster, mätbara resultat och tydlig väg till behovsanalys.", href: "https://nordhamn.fertekz.com" },
-  { kind: "consultant", category: "Konsultföretag", title: "Professionell konsultsida", description: "Ren och förtroendeingivande design med expertis, resultat och tydliga kontaktvägar.", href: "/demo/konsultbolag" },
+  { kind: "consultant", category: "Restaurang och mat", title: "Hakuna Potata", description: "Lekfull och mobilanpassad restaurangsida som presenterar konceptet, menyn och restaurangernas platser.", href: "https://hakunapotata.com" },
 ];
 
 const SitePreview = ({ kind, large = false }: { kind: ExampleKind; large?: boolean }) => {
@@ -39,10 +39,13 @@ const SitePreview = ({ kind, large = false }: { kind: ExampleKind; large?: boole
   }
 
   return (
-    <div className={`bg-[#f7f9fc] text-[#101d3a] overflow-hidden ${large ? "min-h-[560px]" : "h-[240px]"}`}>
-      <div className="flex items-center justify-between px-5 py-3 text-[10px]"><span className="font-bold text-base">Aero Konsult<span className="text-[#326cf4]">.</span></span><span className="hidden sm:block">Expertis · Case · Insikter</span><span className="bg-[#101d3a] text-white rounded px-3 py-1">Boka möte</span></div>
-      <div className={`grid grid-cols-[1.25fr_.75fr] items-center ${large ? "min-h-[300px]" : "h-[190px]"}`}><div className="p-6 sm:p-8"><p className="text-[#326cf4] text-[8px] font-bold uppercase tracking-widest">Strategi · Data · Tillväxt</p><h3 className={`${large ? "text-4xl" : "text-xl"} font-bold mt-2 leading-tight`}>Beslut som skapar mätbar tillväxt</h3><p className="text-[9px] sm:text-xs text-[#62708d] mt-3">Vi hjälper ägarledda bolag att växa lönsamt med tydlig strategi och bättre beslutsunderlag.</p><button className="mt-4 bg-[#326cf4] text-white rounded px-4 py-2 text-[9px]">Boka ett första möte</button></div><div className="h-[75%] mr-5 rounded-xl bg-gradient-to-br from-[#dce6ff] to-[#adc3f8] flex items-center justify-center"><BriefcaseBusiness className={`${large ? "h-24 w-24" : "h-14 w-14"} text-[#326cf4]`} /></div></div>
-      <div className="px-5 py-4"><div className="flex justify-between items-end mb-3"><p className="font-bold text-sm">Vår expertis</p><Badge className="text-[8px] bg-[#e6edff] text-[#326cf4] border-0">Case: +38% tillväxt</Badge></div><div className="grid grid-cols-3 gap-2">{[["Strategi", "Tillväxtplan"], ["Analys", "Data & KPI"], ["Ledning", "Interim stöd"]].map(([name, text]) => <div key={name} className="bg-white border border-[#e4e9f2] rounded p-3"><span className="block text-[10px] font-bold">{name}</span><span className="text-[8px] text-[#62708d]">{text}</span></div>)}</div><p className="text-[8px] text-center mt-4 text-[#62708d]">Betrott av växande företag i hela Mälardalen</p></div>
+    <div className={`relative overflow-hidden bg-[#ef4b16] ${large ? "min-h-[560px]" : "h-[240px]"}`}>
+      <img
+        src="/project-images/hakuna-potata.webp"
+        alt="Hakuna Potata – restaurangkoncept med bakpotatis"
+        className="h-full w-full object-cover"
+        loading="lazy"
+      />
     </div>
   );
 };
