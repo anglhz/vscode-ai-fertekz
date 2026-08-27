@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, BriefcaseBusiness, Hammer, PenTool } from "lucide-react";
+import { ArrowRight, BriefcaseBusiness, Gauge, PenTool } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ type ExampleKind = "tattoo" | "builder" | "consultant";
 
 const examples: { kind: ExampleKind; category: string; title: string; description: string; href: string }[] = [
   { kind: "tattoo", category: "Tatueringsstudio", title: "Obsidian Ink", description: "Mörk och exklusiv studiosida med portfolio, information om studion och tydliga vägar till bokning.", href: "https://obsidian-ink.fertekz.com" },
-  { kind: "builder", category: "Lokalt tjänsteföretag", title: "Trygg hemsida för hantverkare", description: "Robust upplägg med tjänster, garantier, referenser och ett snabbt offertflöde.", href: "/demo/byggforetag" },
+  { kind: "builder", category: "Energi och fastighet", title: "Nordhamn Energioptimering", description: "Teknisk och förtroendeingivande företagssida med tjänster, mätbara resultat och tydlig väg till behovsanalys.", href: "https://nordhamn.fertekz.com" },
   { kind: "consultant", category: "Konsultföretag", title: "Professionell konsultsida", description: "Ren och förtroendeingivande design med expertis, resultat och tydliga kontaktvägar.", href: "/demo/konsultbolag" },
 ];
 
@@ -31,10 +31,9 @@ const SitePreview = ({ kind, large = false }: { kind: ExampleKind; large?: boole
 
   if (kind === "builder") {
     return (
-      <div className={`bg-[#f5f2ea] text-[#17211b] overflow-hidden ${large ? "min-h-[560px]" : "h-[240px]"}`}>
-        <div className="flex items-center justify-between px-5 py-3 bg-[#17211b] text-white text-[10px]"><span className="font-black text-base">SÖRMLANDS BYGG</span><span className="hidden sm:block">Tjänster · Projekt · Områden</span><span className="bg-[#e5a52d] text-[#17211b] font-bold px-3 py-1">Begär offert</span></div>
-        <div className={`relative flex items-center bg-gradient-to-r from-[#17211b] to-[#375343] text-white ${large ? "min-h-[300px]" : "h-[190px]"}`}><div className="p-6 sm:p-8 max-w-[70%]"><p className="text-[#e5a52d] text-[8px] uppercase tracking-widest">Lokalt byggföretag</p><h3 className={`${large ? "text-4xl" : "text-xl"} font-black mt-2 leading-tight`}>Tryggt hantverk. Hela vägen.</h3><p className="text-[9px] sm:text-xs text-white/70 mt-3">F-skatt, försäkring och fem års garanti. Kostnadsfri offert inom 24 timmar.</p><button className="mt-4 bg-[#e5a52d] text-[#17211b] font-bold px-4 py-2 text-[9px]">Begär kostnadsfri offert</button></div><Hammer className={`${large ? "h-28 w-28" : "h-16 w-16"} absolute right-8 text-white/15`} /></div>
-        <div className="p-5"><div className="flex gap-3 mb-4 text-[8px] font-semibold"><span>✓ F-skatt</span><span>✓ Försäkrat</span><span>✓ Fast kontaktperson</span></div><p className="font-bold text-sm mb-3">Våra tjänster</p><div className="grid grid-cols-3 gap-2">{[["Badrum", "Totalrenovering"], ["Kök", "Snickeri & kakel"], ["Tillbyggnad", "Nyckelfärdigt"]].map(([name, text]) => <div key={name} className="border border-[#d9d3c5] p-3"><span className="block text-[10px] font-bold">{name}</span><span className="text-[8px] text-[#58645d]">{text}</span></div>)}</div></div>
+      <div className={`bg-[#eef1eb] text-[#183027] overflow-hidden ${large ? "min-h-[560px]" : "h-[240px]"}`}>
+        <div className="flex items-center justify-between px-5 py-3 bg-[#f6f8f3] text-[9px] border-b border-[#183027]/10"><span className="font-bold text-sm leading-none">Nordhamn<span className="block text-[6px] uppercase tracking-[.18em] text-[#5b7168] mt-1">Energioptimering</span></span><span className="hidden sm:block">Tjänster · Så arbetar vi · Projekt</span><span className="bg-[#d8ee63] text-[#183027] font-bold px-3 py-1.5 rounded-full">Boka analys</span></div>
+        <div className={`relative flex items-center bg-gradient-to-br from-[#17362d] via-[#214b3f] to-[#0f2821] text-white ${large ? "min-h-[300px]" : "h-[190px]"}`}><div className="p-6 sm:p-8 max-w-[78%]"><p className="text-[#d8ee63] text-[7px] uppercase tracking-[.2em]">Energioptimering för fastigheter</p><h3 className={`${large ? "text-4xl" : "text-xl"} font-bold mt-2 leading-tight`}>Lägre energikostnader.</h3><p className="text-[9px] sm:text-xs text-white/65 mt-3">Åtgärder som går att räkna hem – från första mätning till verifierad besparing.</p><span className="inline-block mt-4 bg-[#d8ee63] text-[#183027] font-bold rounded-full px-4 py-2 text-[8px]">Boka behovsanalys</span></div><Gauge className={`${large ? "h-28 w-28" : "h-16 w-16"} absolute right-7 text-[#d8ee63]/25`} /></div>
       </div>
     );
   }
