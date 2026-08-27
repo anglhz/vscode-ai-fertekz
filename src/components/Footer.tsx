@@ -11,6 +11,7 @@ const Footer = () => {
     { name: "Arbetsprocess", href: "/#process" },
     // { name: "Omdömen", href: "/#testimonials" },
     { name: "Kontakt", href: "/#contact" },
+    { name: "Hantera abonnemang", href: "/hantera-abonnemang" },
   ];
 
   const serviceLinks = [

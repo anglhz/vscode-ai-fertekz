@@ -85,6 +85,17 @@ const operationsGuide = [
   ["Vid uppsägning", "Bekräfta slutdatum, lämna ut kundens material och åtkomster, dokumentera domän/DNS och ange hur länge sista backupen behålls. Radera personuppgifter enligt villkoren."],
 ];
 
+const cancellationGuide = [
+  ["1. Uppsägningen registreras", "Kunden avslutar via Stripe Customer Portal eller kontaktar Fertekz IT. Välj avslut vid slutet av aktuell betalningsperiod, inte omedelbart."],
+  ["2. Bekräfta slutdatum", "Skicka en skriftlig bekräftelse med sista aktiva dag och förklara att inga fler månadsdebiteringar görs."],
+  ["3. Tjänsten fortsätter", "Hemsida, hosting, SSL, support och backup fortsätter som vanligt till den redan betalda periodens slut."],
+  ["4. Kontrollera Stripe", "Verifiera cancel_at_period_end och slutdatum i Stripe. Webhooken ska uppdatera posten i stripe_subscriptions."],
+  ["5. Förbered överlämning", "Samla kundens domänuppgifter, logotyp, bilder och egna texter. Bekräfta vad som lämnas ut enligt avtalet."],
+  ["6. Stäng webbdriften", "Efter slutdatumet stoppas hosting, support, tekniskt underhåll och löpande ändringar. Domän och separat e-post påverkas inte."],
+  ["7. Sista backup", "Skapa och dokumentera en sista backup. Behåll den i 30 dagar efter slutdatumet om inget annat har avtalats."],
+  ["8. Radera och dokumentera", "Efter 30 dagar tas webbplats och kundmaterial bort från server och backup. Behåll bara bokföringsunderlag och sådant som måste sparas enligt lag."],
+];
+
 const AdminPortal = () => {
   const navigate = useNavigate();
   const { user, isAdmin, loading } = useAuth();
@@ -197,6 +208,7 @@ const AdminPortal = () => {
             <TabsTrigger value="delivery">Lathund: kundleverans</TabsTrigger>
             <TabsTrigger value="meeting">Lathund: informationsmöte</TabsTrigger>
             <TabsTrigger value="operations">Lathund: drift & kundägande</TabsTrigger>
+            <TabsTrigger value="cancellation">Lathund: uppsägning</TabsTrigger>
           </TabsList>
 
           <TabsContent value="customers">
@@ -284,6 +296,7 @@ const AdminPortal = () => {
           <TabsContent value="delivery"><Guide title="Kundgenomgång – från material till lansering" description="Använd frågorna i kickoffen och inför varje viktig avstämning." items={customerGuide} /></TabsContent>
           <TabsContent value="meeting"><Guide title="Informationsmöte – första samtalet" description="En enkel struktur för att förstå behovet och hjälpa kunden välja rätt nästa steg." items={meetingGuide} /></TabsContent>
           <TabsContent value="operations"><Guide title="Drift, domän, backup och e-post" description="Standardupplägget för en trygg leverans med tydligt ägande och ansvar." items={operationsGuide} /></TabsContent>
+          <TabsContent value="cancellation"><Guide title="Uppsägning – från besked till radering" description="Arbetsordning när en kund avslutar sitt Fertekz-abonnemang." items={cancellationGuide} /></TabsContent>
         </Tabs>
       </div>
     </div>

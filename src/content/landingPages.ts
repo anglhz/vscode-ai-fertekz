@@ -104,7 +104,7 @@ export const landingPages: Record<string, LandingPageContent> = {
         heading: "Priser utan överraskningar",
         paragraphs: [
           "Fertekz Start kostar 299 kr/mån för en tydlig ensideshemsida. Företag kostar 399 kr/mån och omfattar upp till fem sidor. Pro kostar 499 kr/mån för upp till sju sidor, mer SEO och prioriterad support.",
-          "Hosting, SSL, säkerhetskopior, tekniskt underhåll, support och löpande mindre ändringar ingår. Ingen startavgift tillkommer och uppsägningstiden är en månad. Alla priser är exklusive moms.",
+          "Hosting, SSL, säkerhetskopior, tekniskt underhåll, support och löpande mindre ändringar ingår. Ingen startavgift eller bindningstid tillkommer. Vid avslut gäller abonnemanget till slutet av den redan betalda perioden. Alla priser är exklusive moms.",
         ],
       },
     ],
@@ -197,7 +197,7 @@ export const landingPages: Record<string, LandingPageContent> = {
           "Frilansare med enkel portfolio: Start för 299 kr/mån",
         ],
         paragraphs: [
-          "Alla priser är exklusive moms. Ingen startavgift tillkommer och abonnemanget har en månads uppsägningstid.",
+          "Alla priser är exklusive moms. Ingen startavgift eller bindningstid tillkommer. Abonnemanget kan avslutas när som helst och gäller till slutet av den redan betalda perioden.",
         ],
       },
       {

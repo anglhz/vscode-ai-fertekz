@@ -67,7 +67,7 @@ const faqs = [
   },
   {
     question: "Finns det någon bindningstid?",
-    answer: "Nej. Abonnemanget har en månads uppsägningstid och du kan byta paket när dina behov ändras.",
+    answer: "Nej. Du kan avsluta när som helst och abonnemanget gäller till slutet av den redan betalda månadsperioden. Därefter görs inga fler debiteringar.",
   },
 ];
 
@@ -124,7 +124,7 @@ const About = () => {
       </div>
 
       <p className="text-center text-sm text-muted-foreground mb-20">
-        Alla priser är exklusive moms. Ingen startavgift. Månadsvis betalning i förskott och en månads uppsägningstid. Domänkostnad tillkommer.
+        Alla priser är exklusive moms. Ingen startavgift. Månadsvis betalning i förskott och ingen bindningstid. Domänkostnad tillkommer. <a href="/hantera-abonnemang" className="text-primary hover:underline">Hantera abonnemang</a>
       </p>
 
       <div className="max-w-3xl mx-auto">

@@ -170,7 +170,7 @@ export const servicePages: Record<string, LandingPageContent> = {
     eyebrow: "Hemsidor",
     h1: "Hemsidor för företag – välj rätt omfattning från början",
     intro:
-      "Här är en samlad översikt över tre enkla abonnemang för olika verksamheter. Alla priser anges per månad exklusive moms, utan startavgift och med en månads uppsägningstid.",
+      "Här är en samlad översikt över tre enkla abonnemang för olika verksamheter. Alla priser anges per månad exklusive moms, utan startavgift eller bindningstid. Abonnemanget gäller till slutet av den redan betalda perioden.",
     highlights: [
       { label: "Start", value: "299 kr/mån" },
       { label: "Företag", value: "399 kr/mån" },

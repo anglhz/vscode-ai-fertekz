@@ -49,7 +49,7 @@ const StartSubscription = () => {
         <div className="text-center mb-10">
           <p className="text-sm gradient-text font-semibold mb-2">Säker beställning</p>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Starta ditt abonnemang</h1>
-          <p className="text-muted-foreground">Betala första månaden nu. Ingen startavgift och en månads uppsägningstid.</p>
+          <p className="text-muted-foreground">Betala första månaden nu. Ingen startavgift eller bindningstid – avsluta när som helst till periodens slut.</p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 items-start">
