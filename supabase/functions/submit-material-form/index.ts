@@ -1,4 +1,5 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
+import Stripe from "npm:stripe@^22.0.0";
 
 const allowedOrigins = new Set([
   "https://fertekz.com",
@@ -11,6 +12,7 @@ const allowedOrigins = new Set([
 const supabaseUrl = Deno.env.get("SUPABASE_URL");
 const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const n8nWebhookUrl = Deno.env.get("N8N_MATERIAL_WEBHOOK_URL");
+const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
 
 const corsHeaders = (origin: string) => ({
   "Access-Control-Allow-Origin": allowedOrigins.has(origin) ? origin : "https://fertekz.com",
@@ -30,12 +32,41 @@ const text = (value: unknown, max: number) =>
 
 const rateLimits = new Map<string, number>();
 
+const verifyCheckoutSession = async (sessionId: unknown) => {
+  const id = text(sessionId, 255);
+  if (!stripeSecretKey || !/^cs_(test|live)_[A-Za-z0-9]+$/.test(id)) {
+    throw new Error("INVALID_CHECKOUT_SESSION");
+  }
+
+  const stripe = new Stripe(stripeSecretKey);
+  const session = await stripe.checkout.sessions.retrieve(id, { expand: ["subscription"] });
+  if (session.mode !== "subscription" || session.status !== "complete" || session.payment_status !== "paid") {
+    throw new Error("PAYMENT_NOT_CONFIRMED");
+  }
+
+  const subscription = typeof session.subscription === "string"
+    ? await stripe.subscriptions.retrieve(session.subscription)
+    : session.subscription;
+  if (!subscription || !["active", "trialing"].includes(subscription.status)) {
+    throw new Error("SUBSCRIPTION_NOT_ACTIVE");
+  }
+
+  const email = (session.customer_details?.email ?? session.customer_email ?? "").trim().toLowerCase();
+  const company = text(session.metadata?.company, 120);
+  const packageId = text(session.metadata?.packageId, 30);
+  if (!email || !company || !["start", "foretag", "pro"].includes(packageId)) {
+    throw new Error("CHECKOUT_DATA_MISSING");
+  }
+
+  return { sessionId: session.id, email, company, packageId };
+};
+
 Deno.serve(async (request) => {
   const origin = request.headers.get("origin") ?? "";
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders(origin) });
   if (request.method !== "POST") return json({ error: "Metoden stöds inte" }, 405, origin);
   if (!allowedOrigins.has(origin)) return json({ error: "Otillåtet ursprung" }, 403, origin);
-  if (!supabaseUrl || !serviceRoleKey) return json({ error: "Tjänsten är inte konfigurerad" }, 503, origin);
+  if (!supabaseUrl || !serviceRoleKey || !stripeSecretKey) return json({ error: "Tjänsten är inte konfigurerad" }, 503, origin);
 
   const ip = (request.headers.get("x-forwarded-for") ?? "unknown").split(",")[0].trim();
   const lastSubmission = rateLimits.get(ip) ?? 0;
@@ -45,14 +76,32 @@ Deno.serve(async (request) => {
 
   try {
     const body = await request.json();
+    let checkout;
+    try {
+      checkout = await verifyCheckoutSession(body.checkoutSessionId);
+    } catch (error) {
+      console.error("submit-material-form checkout verification", error instanceof Error ? error.message : error);
+      return json({
+        error: "Betalningen kunde inte verifieras. Öppna materialformuläret via länken efter betalningen.",
+        code: "PAYMENT_REQUIRED",
+      }, 403, origin);
+    }
+
+    if (body.action === "verify") {
+      return json({
+        success: true,
+        customer: { email: checkout.email, companyName: checkout.company, packageId: checkout.packageId },
+      }, 200, origin);
+    }
+
     if (text(body.website, 100)) return json({ success: true }, 200, origin);
 
     const submission = {
-      package_id: text(body.packageId, 30) || null,
-      company_name: text(body.companyName, 120),
+      package_id: checkout.packageId,
+      company_name: checkout.company,
       organization_number: text(body.organizationNumber, 30) || null,
       contact_name: text(body.contactName, 120),
-      email: text(body.email, 254).toLowerCase(),
+      email: checkout.email,
       phone: text(body.phone, 40) || null,
       existing_website: text(body.existingWebsite, 500) || null,
       business_description: text(body.businessDescription, 5000),
@@ -103,11 +152,14 @@ Deno.serve(async (request) => {
 
     const { data, error } = await supabase
       .from("material_submissions")
-      .insert({ ...submission, customer_id: customer.id })
+      .insert({ ...submission, customer_id: customer.id, stripe_checkout_session_id: checkout.sessionId })
       .select("id")
       .single();
     if (error) {
       console.error("submit-material-form material", error);
+      if (error.code === "23505") {
+        return json({ error: "Material har redan skickats för den här beställningen.", code: "ALREADY_SUBMITTED" }, 409, origin);
+      }
       return json({ error: "Materialuppgifterna kunde inte sparas", code: "MATERIAL_SAVE_FAILED" }, 500, origin);
     }
 

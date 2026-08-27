@@ -86,6 +86,7 @@ export type Database = {
           services: string
           social_links: string | null
           status: string
+          stripe_checkout_session_id: string | null
           target_audience: string
           website_goals: string
         }
@@ -115,6 +116,7 @@ export type Database = {
           services: string
           social_links?: string | null
           status?: string
+          stripe_checkout_session_id?: string | null
           target_audience: string
           website_goals: string
         }
@@ -144,6 +146,7 @@ export type Database = {
           services?: string
           social_links?: string | null
           status?: string
+          stripe_checkout_session_id?: string | null
           target_audience?: string
           website_goals?: string
         }

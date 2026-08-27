@@ -1,6 +1,6 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { ArrowLeft, Building2, CheckCircle2, FileText, Link2, Loader2, Palette, Send, Target } from "lucide-react";
+import { ArrowLeft, Building2, CheckCircle2, FileText, Link2, Loader2, LockKeyhole, Palette, Send, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -47,11 +47,48 @@ const initialData: MaterialData = {
 
 const MaterialForm = () => {
   const [searchParams] = useSearchParams();
-  const [data, setData] = useState<MaterialData>({ ...initialData, packageId: searchParams.get("paket") ?? "" });
+  const checkoutSessionId = searchParams.get("session_id") ?? "";
+  const [data, setData] = useState<MaterialData>(initialData);
+  const [verification, setVerification] = useState<"checking" | "verified" | "denied">("checking");
+  const [verificationError, setVerificationError] = useState<string | null>(null);
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [complete, setComplete] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const verifyPayment = async () => {
+      if (!checkoutSessionId) {
+        setVerificationError("En säker materiallänk saknas. Öppna formuläret från betalningsbekräftelsen.");
+        setVerification("denied");
+        return;
+      }
+
+      const { data: response, error: invokeError } = await supabase.functions.invoke("submit-material-form", {
+        body: { action: "verify", checkoutSessionId },
+      });
+      if (!active) return;
+
+      if (invokeError || !response?.success || !response?.customer) {
+        setVerificationError(response?.error ?? await edgeFunctionError(invokeError) ?? "Beställningen kunde inte verifieras.");
+        setVerification("denied");
+        return;
+      }
+
+      setData((current) => ({
+        ...current,
+        packageId: response.customer.packageId,
+        companyName: response.customer.companyName,
+        email: response.customer.email,
+      }));
+      setVerification("verified");
+    };
+
+    void verifyPayment();
+    return () => { active = false; };
+  }, [checkoutSessionId]);
 
   const update = (field: keyof MaterialData, value: string) => setData((current) => ({ ...current, [field]: value }));
 
@@ -60,7 +97,7 @@ const MaterialForm = () => {
     setLoading(true);
     setError(null);
     const { data: response, error: invokeError } = await supabase.functions.invoke("submit-material-form", {
-      body: { ...data, consent },
+      body: { ...data, consent, checkoutSessionId },
     });
     if (invokeError || !response?.success) {
       setError(response?.error ?? await edgeFunctionError(invokeError) ?? "Materialet kunde inte skickas. Försök igen.");
@@ -71,6 +108,30 @@ const MaterialForm = () => {
     setLoading(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  if (verification !== "verified") {
+    return (
+      <main className="min-h-screen gradient-hero flex items-center justify-center px-6 py-16">
+        <Seo title="Säkert materialformulär | Fertekz IT" description="Verifiering av beställning inför materialinlämning." path="/material" noindex />
+        <Card className="max-w-xl p-10 text-center gradient-card shadow-glow">
+          {verification === "checking" ? (
+            <Loader2 className="h-14 w-14 text-primary mx-auto mb-6 animate-spin" />
+          ) : (
+            <LockKeyhole className="h-14 w-14 text-primary mx-auto mb-6" />
+          )}
+          <h1 className="text-3xl font-bold mb-4">
+            {verification === "checking" ? "Verifierar beställningen…" : "Säker materiallänk krävs"}
+          </h1>
+          <p className="text-muted-foreground mb-8">
+            {verification === "checking"
+              ? "Vänta medan betalningen kontrolleras säkert mot Stripe."
+              : verificationError}
+          </p>
+          {verification === "denied" && <Button asChild><Link to="/#contact">Kontakta Fertekz IT</Link></Button>}
+        </Card>
+      </main>
+    );
+  }
 
   if (complete) {
     return (
@@ -86,10 +147,10 @@ const MaterialForm = () => {
     );
   }
 
-  const field = (id: keyof MaterialData, label: string, required = false, placeholder = "") => (
+  const field = (id: keyof MaterialData, label: string, required = false, placeholder = "", readOnly = false) => (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}{required && <span className="text-primary"> *</span>}</Label>
-      <Input id={id} value={data[id]} onChange={(event) => update(id, event.target.value)} required={required} placeholder={placeholder} />
+      <Input id={id} value={data[id]} onChange={(event) => update(id, event.target.value)} required={required} placeholder={placeholder} readOnly={readOnly} className={readOnly ? "opacity-70" : undefined} />
     </div>
   );
 
@@ -117,10 +178,10 @@ const MaterialForm = () => {
           <Card className="p-6 sm:p-8 gradient-card">
             <SectionTitle icon={Building2} number="1" title="Företaget och kontaktpersonen" />
             <div className="grid sm:grid-cols-2 gap-5">
-              {field("companyName", "Företagsnamn", true, "Företaget AB")}
+              {field("companyName", "Företagsnamn", true, "Företaget AB", true)}
               {field("organizationNumber", "Organisationsnummer", false, "XXXXXX-XXXX")}
               {field("contactName", "Kontaktperson", true, "För- och efternamn")}
-              {field("email", "E-post", true, "namn@foretag.se")}
+              {field("email", "E-post", true, "namn@foretag.se", true)}
               {field("phone", "Telefon", false, "070-123 45 67")}
               {field("existingWebsite", "Nuvarande hemsida", false, "https://...")}
             </div>
