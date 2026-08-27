@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowRight, Gauge, PenTool } from "lucide-react";
+import { ArrowRight, Gauge, PenTool, Scale } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -9,7 +9,7 @@ type ExampleKind = "tattoo" | "builder" | "consultant";
 const examples: { kind: ExampleKind; category: string; title: string; description: string; href: string }[] = [
   { kind: "tattoo", category: "Tatueringsstudio", title: "Obsidian Ink", description: "Mörk och exklusiv studiosida med portfolio, information om studion och tydliga vägar till bokning.", href: "https://obsidian-ink.fertekz.com" },
   { kind: "builder", category: "Energi och fastighet", title: "Nordhamn Energioptimering", description: "Teknisk och förtroendeingivande företagssida med tjänster, mätbara resultat och tydlig väg till behovsanalys.", href: "https://nordhamn.fertekz.com" },
-  { kind: "consultant", category: "Restaurang och mat", title: "Hakuna Potata", description: "Lekfull och mobilanpassad restaurangsida som presenterar konceptet, menyn och restaurangernas platser.", href: "https://hakunapotata.com" },
+  { kind: "consultant", category: "Advokatbyrå", title: "LexNova", description: "Sober och förtroendeingivande advokatsida med rättsområden, byråpresentation och tydlig väg till rådgivning.", href: "https://lexnova.fertekz.com" },
 ];
 
 const SitePreview = ({ kind, large = false }: { kind: ExampleKind; large?: boolean }) => {
@@ -39,13 +39,21 @@ const SitePreview = ({ kind, large = false }: { kind: ExampleKind; large?: boole
   }
 
   return (
-    <div className={`relative overflow-hidden bg-[#ef4b16] ${large ? "min-h-[560px]" : "h-[240px]"}`}>
-      <img
-        src="/project-images/hakuna-potata.webp"
-        alt="Hakuna Potata – restaurangkoncept med bakpotatis"
-        className="h-full w-full object-cover"
-        loading="lazy"
-      />
+    <div className={`relative overflow-hidden bg-[#f5f1e8] text-[#14283d] ${large ? "min-h-[560px]" : "h-[240px]"}`}>
+      <div className="flex items-center justify-between px-5 py-3 border-b border-[#14283d]/10 text-[9px]">
+        <span className="font-serif text-base font-bold tracking-wide">LEX<span className="text-[#a77b35]">NOVA</span></span>
+        <span className="hidden sm:block">Rättsområden · Om byrån · Insikter</span>
+        <span className="bg-[#14283d] text-white px-3 py-1.5">Boka rådgivning</span>
+      </div>
+      <div className={`relative flex items-center ${large ? "min-h-[300px]" : "h-[190px]"}`}>
+        <div className="p-6 sm:p-8 max-w-[78%]">
+          <p className="text-[#a77b35] text-[7px] uppercase tracking-[.22em]">Affärsjuridik med personlig rådgivning</p>
+          <h3 className={`${large ? "text-4xl" : "text-xl"} font-serif font-bold mt-2 leading-tight`}>Juridisk trygghet i varje beslut.</h3>
+          <p className="text-[9px] sm:text-xs text-[#526170] mt-3">Tydliga råd, långsiktiga relationer och ett engagemang som utgår från klientens verksamhet.</p>
+          <span className="inline-block mt-4 border border-[#a77b35] text-[#14283d] px-4 py-2 text-[8px]">Kontakta en advokat</span>
+        </div>
+        <Scale className={`${large ? "h-28 w-28" : "h-16 w-16"} absolute right-7 text-[#a77b35]/30`} />
+      </div>
     </div>
   );
 };

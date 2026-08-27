@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import {
   BookOpen, Check, CheckCircle2, ClipboardCheck, ExternalLink, FileText, LogOut,
-  Mail, MessageSquareText, Phone, RefreshCw, Search, Users,
+  Mail, MessageSquareText, Phone, RefreshCw, Search, Trash2, Users,
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +17,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 type Customer = Tables<"customers">;
 type Material = Tables<"material_submissions">;
@@ -76,6 +81,7 @@ const AdminPortal = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [fetching, setFetching] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [notes, setNotes] = useState("");
 
   useEffect(() => {
@@ -130,6 +136,22 @@ const AdminPortal = () => {
     if (!selected) return;
     const checklist = { ...asChecklist(selected.checklist), [key]: checked };
     if (await updateCustomer(selected.id, { checklist })) toast.success("Checklistan uppdaterades");
+  };
+
+  const deleteCustomer = async (customer: Customer) => {
+    setDeleting(true);
+    const { error } = await supabase.from("customers").delete().eq("id", customer.id);
+    setDeleting(false);
+    if (error) {
+      toast.error(`Kunden kunde inte raderas: ${error.message}`);
+      return;
+    }
+
+    const remaining = customers.filter((item) => item.id !== customer.id);
+    setCustomers(remaining);
+    setMaterials((current) => current.filter((material) => material.customer_id !== customer.id));
+    setSelectedId(remaining[0]?.id ?? null);
+    toast.success(`${customer.company_name} och allt kopplat material har raderats`);
   };
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-muted-foreground">Laddar…</div>;
@@ -220,6 +242,25 @@ const AdminPortal = () => {
                     <CardContent>
                       <Textarea value={notes} onChange={(event) => setNotes(event.target.value)} rows={6} placeholder="Beslut, frågor, nästa steg och sådant du vill komma ihåg…" />
                       <Button className="mt-4" onClick={async () => { if (await updateCustomer(selected.id, { notes })) toast.success("Anteckningarna sparades"); }}>Spara anteckningar</Button>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="border-destructive/40">
+                    <CardHeader><CardTitle className="text-lg text-destructive">Radera kund</CardTitle><CardDescription>Tar permanent bort kundprofilen, anteckningar, checklista och alla kopplade materialinskick.</CardDescription></CardHeader>
+                    <CardContent>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild><Button variant="destructive"><Trash2 className="h-4 w-4 mr-2" />Radera kunden</Button></AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Radera {selected.company_name}?</AlertDialogTitle>
+                            <AlertDialogDescription>Åtgärden kan inte ångras. Kundens profil och alla materialinskick tas bort permanent. Stripe-abonnemang och filer i externa materialmappar påverkas inte.</AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Avbryt</AlertDialogCancel>
+                            <AlertDialogAction disabled={deleting} onClick={() => deleteCustomer(selected)} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">{deleting ? "Raderar…" : "Ja, radera allt"}</AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </CardContent>
                   </Card>
                 </div>
