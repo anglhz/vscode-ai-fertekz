@@ -1,4 +1,5 @@
 import LegalPage from "@/components/LegalPage";
+import CompanyDetails from "@/components/CompanyDetails";
 
 const PrivacyPolicy = () => (
   <LegalPage
@@ -98,6 +99,8 @@ const PrivacyPolicy = () => (
       <h2>8. Ändringar</h2>
       <p>Policyn kan uppdateras när tjänsten eller lagkraven förändras. Den aktuella versionen publiceras alltid på denna sida.</p>
     </section>
+
+    <CompanyDetails />
   </LegalPage>
 );
 

@@ -1,4 +1,5 @@
 import LegalPage from "@/components/LegalPage";
+import CompanyDetails from "@/components/CompanyDetails";
 
 const TermsOfService = () => (
   <LegalPage
@@ -131,6 +132,8 @@ const TermsOfService = () => (
         pågående abonnemang meddelas i skälig tid innan de börjar gälla.
       </p>
     </section>
+
+    <CompanyDetails />
   </LegalPage>
 );
 
