@@ -12,26 +12,15 @@ const Auth = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mode, setMode] = useState<"login" | "signup">("login");
   const [loading, setLoading] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (mode === "login") {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw error;
-        navigate("/admin");
-      } else {
-        const { error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { emailRedirectTo: `${window.location.origin}/admin` },
-        });
-        if (error) throw error;
-        toast.success("Konto skapat – bekräfta din e-post för att logga in.");
-      }
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) throw error;
+      navigate("/admin");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Något gick fel");
     } finally {
@@ -47,8 +36,8 @@ const Auth = () => {
       </Helmet>
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>{mode === "login" ? "Logga in" : "Skapa konto"}</CardTitle>
-          <CardDescription>Åtkomst till adminportalen.</CardDescription>
+          <CardTitle>Logga in</CardTitle>
+          <CardDescription>Endast för behöriga administratörer.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="space-y-4">
@@ -68,7 +57,7 @@ const Auth = () => {
               <Input
                 id="password"
                 type="password"
-                autoComplete={mode === "login" ? "current-password" : "new-password"}
+                autoComplete="current-password"
                 required
                 minLength={8}
                 value={password}
@@ -76,16 +65,9 @@ const Auth = () => {
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Vänta…" : mode === "login" ? "Logga in" : "Skapa konto"}
+              {loading ? "Vänta…" : "Logga in"}
             </Button>
           </form>
-          <button
-            type="button"
-            onClick={() => setMode(mode === "login" ? "signup" : "login")}
-            className="mt-4 text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            {mode === "login" ? "Har du inget konto? Skapa ett" : "Har du redan ett konto? Logga in"}
-          </button>
         </CardContent>
       </Card>
     </div>

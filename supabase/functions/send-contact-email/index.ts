@@ -5,13 +5,21 @@ const resendApiKey = Deno.env.get("RESEND_API_KEY");
 const n8nWebhookUrl = Deno.env.get("N8N_CONTACT_WEBHOOK_URL") ??
   "https://n8n.fertekz.com/webhook/contact-forms";
 
-// CORS headers - allow preview domains and production
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*", // Temporarily allowing all origins for development
+const allowedOrigins = new Set([
+  "https://fertekz.com",
+  "https://www.fertekz.com",
+  "http://localhost:8080",
+  "http://127.0.0.1:8080",
+  "http://localhost:5173",
+]);
+
+const corsHeaders = (origin: string) => ({
+  "Access-Control-Allow-Origin": allowedOrigins.has(origin) ? origin : "https://fertekz.com",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Max-Age": "86400", // 24 hours
-};
+  "Access-Control-Max-Age": "86400",
+  "Vary": "Origin",
+});
 
 // Security headers to enhance protection
 const securityHeaders = {
@@ -120,9 +128,26 @@ function checkRateLimit(ip: string): boolean {
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  const origin = req.headers.get("origin") ?? "";
+  const responseCorsHeaders = corsHeaders(origin);
+
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: { ...corsHeaders, ...securityHeaders } });
+    return new Response(null, { status: 204, headers: { ...responseCorsHeaders, ...securityHeaders } });
+  }
+
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Method not allowed" }), {
+      status: 405,
+      headers: { "Content-Type": "application/json", ...responseCorsHeaders, ...securityHeaders },
+    });
+  }
+
+  if (!allowedOrigins.has(origin)) {
+    return new Response(JSON.stringify({ error: "Origin not allowed" }), {
+      status: 403,
+      headers: { "Content-Type": "application/json", ...responseCorsHeaders, ...securityHeaders },
+    });
   }
 
   try {
@@ -138,7 +163,7 @@ const handler = async (req: Request): Promise<Response> => {
         JSON.stringify({ error: "Too many requests. Please try again later." }),
         {
           status: 429,
-          headers: { "Content-Type": "application/json", ...corsHeaders, ...securityHeaders },
+          headers: { "Content-Type": "application/json", ...responseCorsHeaders, ...securityHeaders },
         }
       );
     }
@@ -153,7 +178,7 @@ const handler = async (req: Request): Promise<Response> => {
         JSON.stringify({ error: "Invalid input", details: validation.errors }),
         {
           status: 400,
-          headers: { "Content-Type": "application/json", ...corsHeaders, ...securityHeaders },
+          headers: { "Content-Type": "application/json", ...responseCorsHeaders, ...securityHeaders },
         }
       );
     }
@@ -229,7 +254,7 @@ const handler = async (req: Request): Promise<Response> => {
       status: 200,
       headers: {
         "Content-Type": "application/json",
-        ...corsHeaders,
+        ...responseCorsHeaders,
         ...securityHeaders,
       },
     });
@@ -240,7 +265,7 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({ error: "Internal server error" }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders, ...securityHeaders },
+        headers: { "Content-Type": "application/json", ...responseCorsHeaders, ...securityHeaders },
       }
     );
   }
