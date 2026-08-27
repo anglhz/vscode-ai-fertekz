@@ -3,8 +3,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import codbaseLogo from "@/assets/codbase-logo.webp.asset.json";
-
 
 const Projects = () => {
   const projects = [
@@ -42,7 +40,7 @@ const Projects = () => {
     {
       title: "CoDBase",
       description: "Gaming community för Call of Duty med tävlingar, LAN och event.",
-      image: codbaseLogo.url,
+      image: "/project-images/codbase-logo.svg",
       imageAlt: "CoDBase logotyp – gaming community för Call of Duty",
       tech: ["Node.js", "JavaScript", "HTML", "CSS"],
       github: "#",

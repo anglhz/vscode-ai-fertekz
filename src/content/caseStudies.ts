@@ -1,5 +1,3 @@
-import codbaseLogo from "@/assets/codbase-logo.webp.asset.json";
-
 export interface CaseStudyContent {
   slug: string;
   title: string;
@@ -174,7 +172,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     ],
     tech: ["Node.js", "JavaScript", "HTML", "CSS"],
     liveUrl: "https://codbase.eu",
-    image: codbaseLogo.url,
+    image: "/project-images/codbase-logo.svg",
     imageAlt: "CoDBase logotyp – gaming community för Call of Duty",
     results: [],
     related: [
