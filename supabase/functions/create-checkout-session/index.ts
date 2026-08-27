@@ -56,6 +56,12 @@ Deno.serve(async (request) => {
       allow_promotion_codes: true,
       billing_address_collection: "required",
       tax_id_collection: { enabled: true },
+      consent_collection: { terms_of_service: "required" },
+      custom_text: {
+        submit: {
+          message: "Abonnemanget förnyas månadsvis tills det sägs upp. Ingen bindningstid.",
+        },
+      },
       metadata: { packageId, packageName: selected.name, company },
       subscription_data: { metadata: { packageId, packageName: selected.name, company } },
       locale: "sv",
