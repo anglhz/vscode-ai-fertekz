@@ -40,10 +40,14 @@ Deno.serve(async (request) => {
     const selected = packages[packageId as keyof typeof packages];
     const email = typeof body.email === "string" ? body.email.trim().slice(0, 254) : "";
     const company = typeof body.company === "string" ? body.company.trim().slice(0, 120) : "";
+    const termsAccepted = body.termsAccepted === true;
     const returnOrigin = typeof body.origin === "string" && allowedOrigins.has(body.origin) ? body.origin : requestOrigin;
 
     if (!selected || !selected.priceId || !email || !company) {
       return json({ error: "Paket, företag eller e-post saknas" }, 400, requestOrigin);
+    }
+    if (!termsAccepted) {
+      return json({ error: "Tjänstevillkoren måste godkännas före betalning" }, 400, requestOrigin);
     }
 
     const stripe = new Stripe(stripeSecretKey);
@@ -62,8 +66,8 @@ Deno.serve(async (request) => {
           message: "Abonnemanget förnyas månadsvis tills det sägs upp. Ingen bindningstid.",
         },
       },
-      metadata: { packageId, packageName: selected.name, company },
-      subscription_data: { metadata: { packageId, packageName: selected.name, company } },
+      metadata: { packageId, packageName: selected.name, company, termsVersion: "2026-08-28" },
+      subscription_data: { metadata: { packageId, packageName: selected.name, company, termsVersion: "2026-08-28" } },
       locale: "sv",
     });
 

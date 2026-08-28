@@ -22,16 +22,21 @@ const StartSubscription = () => {
   const selected = packages[packageId];
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const packageOptions = useMemo(() => Object.entries(packages) as [PackageId, (typeof packages)[PackageId]][], []);
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
+    if (!termsAccepted) {
+      setError("Du behöver godkänna tjänstevillkoren innan du fortsätter till betalningen.");
+      return;
+    }
     setLoading(true);
     setError(null);
     const { data, error: invokeError } = await supabase.functions.invoke("create-checkout-session", {
-      body: { packageId, email, company, origin: window.location.origin },
+      body: { packageId, email, company, origin: window.location.origin, termsAccepted },
     });
     if (invokeError || !data?.url) {
       setError(data?.error ?? invokeError?.message ?? "Betalningen kunde inte startas. Försök igen eller kontakta mig.");
@@ -68,8 +73,14 @@ const StartSubscription = () => {
               <h2 className="text-xl font-semibold">2. Dina uppgifter</h2>
               <div><label htmlFor="company" className="text-sm font-medium block mb-2">Företag</label><Input id="company" value={company} onChange={(e) => setCompany(e.target.value)} required maxLength={120} placeholder="Företagsnamn AB" /></div>
               <div><label htmlFor="email" className="text-sm font-medium block mb-2">E-post</label><Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required maxLength={254} placeholder="namn@foretag.se" /></div>
+              <label htmlFor="terms" className="flex items-start gap-3 rounded-lg border border-border p-4 text-sm leading-relaxed cursor-pointer">
+                <input id="terms" type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.target.checked)} required className="mt-1 h-4 w-4 accent-primary shrink-0" />
+                <span>
+                  Jag godkänner <Link to="/tjanstevillkor" target="_blank" rel="noreferrer" className="text-primary underline underline-offset-2">tjänstevillkoren</Link>. Jag förstår att webbplatsen tillhandahålls som en tjänst under abonnemanget, att källkod inte ingår och att webbplatsen avpubliceras när abonnemanget upphör.
+                </span>
+              </label>
               {error && <p className="text-sm text-destructive" role="alert">{error}</p>}
-              <Button type="submit" size="lg" className="w-full shadow-glow" disabled={loading}>
+              <Button type="submit" size="lg" className="w-full shadow-glow" disabled={loading || !termsAccepted}>
                 {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CreditCard className="h-4 w-4 mr-2" />}
                 Gå till säker betalning · {selected.price} kr
               </Button>

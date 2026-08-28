@@ -53,6 +53,10 @@ const TermsOfService = () => (
         copywriting, fotografering och arbete utanför paketet offereras separat innan arbetet
         utförs.
       </p>
+      <p>
+        Tjänsten är en webbplats som tjänst. Kunden köper en löpande publicerings-, drift- och
+        supporttjänst och inte en överlåtelse eller avbetalning av webbplatsens källkod.
+      </p>
     </section>
 
     <section>
@@ -71,9 +75,16 @@ const TermsOfService = () => (
       <p>
         Kunden behåller rättigheterna till eget material, såsom domän, logotyp, bilder och texter.
         Kunden ger Fertekz IT rätt att använda materialet för att leverera tjänsten. Webbplatsen,
-        dess design, kod och tekniska lösning tillhandahålls som en tjänst under abonnemanget och
-        överlåts inte om inte ett separat skriftligt avtal säger annat. Tredjepartsmaterial och
-        programvara omfattas av respektive licensvillkor.
+        dess design, källkod, återanvändbara komponenter, mallar och tekniska lösning ägs av
+        Fertekz IT eller dess licensgivare. Kunden får en begränsad, icke överlåtbar nyttjanderätt
+        till den publicerade webbplatsen under aktiv abonnemangsperiod. Källkod, repository och
+        driftsmiljö ingår inte i abonnemanget och överlåts inte om inte ett separat skriftligt
+        avtal säger annat. Tredjepartsmaterial och programvara omfattas av respektive licensvillkor.
+      </p>
+      <p>
+        Kunden kan begära en kopia av sitt eget material. Eventuellt friköp eller överlåtelse av
+        webbplatsen, kod eller andra rättigheter kräver ett separat skriftligt avtal och offereras
+        utifrån webbplatsens omfattning.
       </p>
     </section>
 
@@ -88,8 +99,9 @@ const TermsOfService = () => (
       </p>
       <p>
         Efter slutdatumet upphör hosting, support, underhåll och löpande ändringar. En sista backup
-        sparas i 30 dagar och raderas sedan. Kundens separat registrerade domän och e-post påverkas
-        inte av uppsägningen.
+        sparas i 30 dagar och raderas sedan. Nyttjanderätten upphör och webbplatsen avpubliceras vid
+        slutdatumet. Kunden kan fram till dess begära ut sitt eget material. Kundens separat
+        registrerade domän och e-post påverkas inte av uppsägningen.
       </p>
     </section>
 
